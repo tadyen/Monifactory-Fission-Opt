@@ -53,8 +53,6 @@ namespace Fission {
       default: // GoalPower
         return x.avgMult;
       case GoalBreeder:
-        return x.avgBreed;
-        // reward excess heat because it makes it easier to add more cells
         return x.avgBreed + (x.netHeat < 0 ? - x.netHeat / (settings.fuelBaseHeat - x.netHeat) : 0);
       case GoalEfficiency:
         return settings.ensureHeatNeutral ? (x.efficiency - 1) * x.dutyCycle : x.efficiency - 1;
