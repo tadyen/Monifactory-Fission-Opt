@@ -1,3 +1,3 @@
-Web version: https://leu-235.com/ (Built using emscripten. See [web/compile.bat](web/compile.bat) for details.)
+Fork of [leu-235](https://leu-235.com/) by [cyb0124](https://github.com/cyb0124) - [view orignal source](https://github.com/cyb0124/FissionOpt)
 
-To build the benchmark, clone [xtl](https://github.com/xtensor-stack/xtl) and [xtensor](https://github.com/xtensor-stack/xtensor) to the parent directory of this repo and run CMake.
+Modified rules to work with [NuclearCraft Neoteric](https://github.com/igentuman/NuclearCraft-Neoteric)

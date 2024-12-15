@@ -1,0 +1,5 @@
+# ignore compiled items in /src/web
+/src/web/FissionOpt**
+
+#ignore modules
+/modules

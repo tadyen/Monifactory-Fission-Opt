@@ -1,6 +1,6 @@
 #include <emscripten/bind.h>
-#include "../FissionNet.h"
-#include "../OverhaulFissionNet.h"
+#include "../cpp/FissionNet.h"
+#include "../cpp/OverhaulFissionNet.h"
 
 static void setLimit(Fission::Settings &x, int index, int limit) {
   x.limit[index] = limit;
