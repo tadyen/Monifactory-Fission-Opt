@@ -179,12 +179,6 @@ $(() => { FissionOpt().then((FissionOpt) => {
       fuelBaseHeat.val(heat);
     });
   }
-  const applyFuelFactor = (factor) => {
-    if (opt !== null)
-      return;
-    fuelBasePower.val(fuelBasePower.val() * factor);
-    fuelBaseHeat.val(fuelBaseHeat.val() * factor);
-  };
   
   const rates = [], limits = [];
   $('#rate input').each(function() { rates.push($(this)); });
@@ -208,7 +202,7 @@ $(() => { FissionOpt().then((FissionOpt) => {
     175, 135, 160, 40, 160, 60, 185, 130, 150, 70, 150, 40, 115, 95, 170, 145,
     // active cooler TODO fix up vals
     150, 3200, 3000, 4800, 4000, 2800, 7000, 6600, 5400, 6400, 2400, 3600, 2600, 3000, 3600,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
   ]); });
 
   const schedule = () => {
