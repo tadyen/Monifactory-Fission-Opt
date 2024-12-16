@@ -6,7 +6,7 @@
 namespace Fission {
   using Coords = std::vector<std::tuple<int, int, int>>;
 
-  constexpr int neutronReach(4);
+  constexpr int neutronReach(1);
   constexpr double modPower(1.0), modHeat(2.0);
 
   enum {
@@ -26,7 +26,7 @@ namespace Fission {
     // Active variants
     Active,
     // Other
-    Cell = Active * 2, Moderator, Irradiator, Air
+    Cell = Active * 2, Moderator, Air
   };
 
   enum {
