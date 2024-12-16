@@ -449,4 +449,8 @@ $(() => { FissionOpt().then((FissionOpt) => {
     opt = null;
     updateDisables();
   });
+
+  $(document).ready(()=>{
+    $('#DefRate').click();
+  })
 }); });

@@ -11,13 +11,18 @@ namespace Fission {
 
   enum {
     // Cooler
-    Water, Redstone, Quartz, Gold, Glowstone,
-    Lapis, Diamond, Helium, Enderium, Cryotheum,
-    Iron, Emerald, Copper, Tin, Magnesium, 
-    Aluminium, Arsenic, Boron, Endstone, Fluorite,
-    Lead, Nitrogen, Lithium, Manganese, Netherbrick,
-    Netherite, Obsidian, Prismarine, Purpur,
-    Silver, Slime,
+    Water, Redstone, Quartz,
+    Gold, Glowstone, Lapis,
+    Diamond, Helium, Enderium,
+    Cryotheum, Iron, Emerald,
+    Copper, Tin, Magnesium,
+    // New in NC Neoteric:
+    Aluminium, Arsenic, Boron,
+    Endstone, Fluorite, Lead,
+    Nitrogen, Lithium, Manganese,
+    Netherbrick, Netherite, Obsidian,
+    Prismarine, Purpur, Silver,
+    Slime,
     // Active variants
     Active,
     // Other
