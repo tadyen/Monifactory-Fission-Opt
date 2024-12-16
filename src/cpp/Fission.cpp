@@ -312,6 +312,9 @@ namespace Fission {
             //   isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z)
             //     && countActiveNeighbors(Irradiator, x, y, z);
             //   break;
+            case Netherite:
+              isActive(x,y,z)=false;
+              break;
             case Fluorite:
               isActive(x, y, z) = countActiveNeighbors(Gold, x, y, z)
                 && countActiveNeighbors(Prismarine, x, y, z);
