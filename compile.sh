@@ -20,4 +20,5 @@ em++ --bind -s MODULARIZE=1 -s EXPORT_NAME=FissionOpt -s ALLOW_MEMORY_GROWTH=1 -
 echo "compile.sh: em++: compile finished";
 
 # copy web files out for github pages to run
-cp -f ./src/web/*.{html,css,js,wasm} ./ ;
+# cp -f ./src/web/*.{html,css,js,wasm} ./ ;
+cp -f ./src/web/{index.html,main.js,main.css,FissionOpt.js} ./;

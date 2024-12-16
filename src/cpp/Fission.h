@@ -6,16 +6,22 @@
 namespace Fission {
   using Coords = std::vector<std::tuple<int, int, int>>;
 
-  constexpr int neutronReach(4);
+  constexpr int neutronReach(1);
   constexpr double modPower(1.0), modHeat(2.0);
 
   enum {
     // Cooler
     Water, Redstone, Quartz, Gold, Glowstone,
     Lapis, Diamond, Helium, Enderium, Cryotheum,
-    Iron, Emerald, Copper, Tin, Magnesium, Active,
+    Iron, Emerald, Copper, Tin, Magnesium, 
+    Aluminium, Arsenic, Boron, Endstone, Fluorite,
+    Lead, Nitrogen, Lithium, Manganese, Netherbrick,
+    Netherite, Obsidian, Prismarine, Purpur,
+    Silver, Slime,
+    // Active variants
+    Active,
     // Other
-    Cell = Active * 2, Moderator, Air
+    Cell = Active * 2, Moderator, Irradiator, Air
   };
 
   enum {
@@ -58,6 +64,7 @@ namespace Fission {
     bool countMult(int x, int y, int z, int dx, int dy, int dz);
     int countMult(int x, int y, int z);
     bool isActiveSafe(int tile, int x, int y, int z) const;
+    bool isBetweenSafe(int tile, int x, int y, int z) const;
     int countActiveNeighbors(int tile, int x, int y, int z) const;
     bool isTileSafe(int tile, int x, int y, int z) const;
     int countNeighbors(int tile, int x, int y, int z) const;

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>NuclearCraft Fission Reactor Design Generator</title>
+    <title>NC Neoteric Fission Reactor Design Generator</title>
     <link rel="stylesheet" href="main.css"/>
     <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -12,13 +12,13 @@
   <body>
     <header>
       <div>
-        <h2>NuclearCraft Fission Reactor Design Generator</h2>
-        by cyb0124, <a href="https://github.com/cyb0124/FissionOpt">source</a>
+        <h2>NC Fission Reactor Design Generator</h2>
+        original by cyb0124, modified by tadyen <a href="https://github.com/tadyen/FissionOpt">source</a>
       </div>
       <div>
         This tool generates a fission reactor design that maximizes effective power output, breeding speed or efficiency.
-        This page is for the pre-overhaul NuclearCraft version used by many popular modpacks.
-        For the post-overhaul version of NuclearCraft, click <a href="/overhaul.html">here</a>.
+        This page is for <a href="https://github.com/igentuman/NuclearCraft-Neoteric">NC Neoteric</a> version of Nuclearcraft, used in the <a href="https://github.com/ThePansmith/Monifactory">Monifactory</a> modpack.
+        For the pre-modified version of this optimiser, click <a href="https://leu-235.com/">here</a> instead.
       </div>
     </header>
     <section id="settings">
@@ -29,10 +29,8 @@
         <input type="text" id="sizeY">
       </div>
       <div>
-        <b>Step 2</b>: Click on the fuel you want to use in the table below. Most modpacks use the default config, except for E2E and PO3.
-        Alternatively, you can manually enter the fuel data in the textboxes below.
-        The fuel data can be found in the tooltip of the fuel item. Do not use the data shown in JEI, they may be incorrect.
-        You can also use IC2 and ExtremeReactors' fuels. See below the table for more details.
+        <b>Step 2</b>: Default values loaded. Most modpacks use the default config, except for E2E and PO3. You can manually enter the fuel data in the textboxes below.
+        The fuel data can be found in the tooltip of the fuel item.
       </div>
       <div>Fuel Base Power: <input type="text" id="fuelBasePower"> RF/t</div>
       <div>Fuel Base Heat: <input text="text" id="fuelBaseHeat"> H/t</div>
@@ -122,122 +120,7 @@
           <td><a href="javascript:;" id="DefHECf251">Normal</a>
           <br><a href="javascript:;" id="DefHECf251O">Oxide</a></td>
         </tr>
-        <tr><th>E2E</th>
-          <td><a href="javascript:;" id="E2EUraniumIngot">Load</a></td>
-          <td><a href="javascript:;" id="E2ETBU">Normal</a>
-          <br><a href="javascript:;" id="E2ETBUO">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELEU235">Normal</a>
-          <br><a href="javascript:;" id="E2ELEU235O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHEU235">Normal</a>
-          <br><a href="javascript:;" id="E2EHEU235O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELEU233">Normal</a>
-          <br><a href="javascript:;" id="E2ELEU233O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHEU233">Normal</a>
-          <br><a href="javascript:;" id="E2EHEU233O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELEN236">Normal</a>
-          <br><a href="javascript:;" id="E2ELEN236O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHEN236">Normal</a>
-          <br><a href="javascript:;" id="E2EHEN236O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EMOX239">Load</a></td>
-          <td><a href="javascript:;" id="E2EMOX241">Load</a></td>
-          <td><a href="javascript:;" id="E2ELEP239">Normal</a>
-          <br><a href="javascript:;" id="E2ELEP239O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHEP239">Normal</a>
-          <br><a href="javascript:;" id="E2EHEP239O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELEP241">Normal</a>
-          <br><a href="javascript:;" id="E2ELEP241O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHEP241">Normal</a>
-          <br><a href="javascript:;" id="E2EHEP241O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELEA242">Normal</a>
-          <br><a href="javascript:;" id="E2ELEA242O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHEA242">Normal</a>
-          <br><a href="javascript:;" id="E2EHEA242O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELECm243">Normal</a>
-          <br><a href="javascript:;" id="E2ELECm243O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHECm243">Normal</a>
-          <br><a href="javascript:;" id="E2EHECm243O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELECm245">Normal</a>
-          <br><a href="javascript:;" id="E2ELECm245O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHECm245">Normal</a>
-          <br><a href="javascript:;" id="E2EHECm245O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELECm247">Normal</a>
-          <br><a href="javascript:;" id="E2ELECm247O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHECm247">Normal</a>
-          <br><a href="javascript:;" id="E2EHECm247O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELEB248">Normal</a>
-          <br><a href="javascript:;" id="E2ELEB248O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHEB248">Normal</a>
-          <br><a href="javascript:;" id="E2EHEB248O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELECf249">Normal</a>
-          <br><a href="javascript:;" id="E2ELECf249O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHECf249">Normal</a>
-          <br><a href="javascript:;" id="E2EHECf249O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2ELECf251">Normal</a>
-          <br><a href="javascript:;" id="E2ELECf251O">Oxide</a></td>
-          <td><a href="javascript:;" id="E2EHECf251">Normal</a>
-          <br><a href="javascript:;" id="E2EHECf251O">Oxide</a></td>
-        </tr>
-        <tr><th>PO3</th>
-          <td>&mdash;</td>
-          <td><a href="javascript:;" id="PO3TBU">Normal</a>
-          <br><a href="javascript:;" id="PO3TBUO">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LEU235">Normal</a>
-          <br><a href="javascript:;" id="PO3LEU235O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HEU235">Normal</a>
-          <br><a href="javascript:;" id="PO3HEU235O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LEU233">Normal</a>
-          <br><a href="javascript:;" id="PO3LEU233O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HEU233">Normal</a>
-          <br><a href="javascript:;" id="PO3HEU233O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LEN236">Normal</a>
-          <br><a href="javascript:;" id="PO3LEN236O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HEN236">Normal</a>
-          <br><a href="javascript:;" id="PO3HEN236O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3MOX239">Load</a></td>
-          <td><a href="javascript:;" id="PO3MOX241">Load</a></td>
-          <td><a href="javascript:;" id="PO3LEP239">Normal</a>
-          <br><a href="javascript:;" id="PO3LEP239O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HEP239">Normal</a>
-          <br><a href="javascript:;" id="PO3HEP239O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LEP241">Normal</a>
-          <br><a href="javascript:;" id="PO3LEP241O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HEP241">Normal</a>
-          <br><a href="javascript:;" id="PO3HEP241O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LEA242">Normal</a>
-          <br><a href="javascript:;" id="PO3LEA242O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HEA242">Normal</a>
-          <br><a href="javascript:;" id="PO3HEA242O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LECm243">Normal</a>
-          <br><a href="javascript:;" id="PO3LECm243O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HECm243">Normal</a>
-          <br><a href="javascript:;" id="PO3HECm243O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LECm245">Normal</a>
-          <br><a href="javascript:;" id="PO3LECm245O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HECm245">Normal</a>
-          <br><a href="javascript:;" id="PO3HECm245O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LECm247">Normal</a>
-          <br><a href="javascript:;" id="PO3LECm247O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HECm247">Normal</a>
-          <br><a href="javascript:;" id="PO3HECm247O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LEB248">Normal</a>
-          <br><a href="javascript:;" id="PO3LEB248O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HEB248">Normal</a>
-          <br><a href="javascript:;" id="PO3HEB248O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LECf249">Normal</a>
-          <br><a href="javascript:;" id="PO3LECf249O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HECf249">Normal</a>
-          <br><a href="javascript:;" id="PO3HECf249O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3LECf251">Normal</a>
-          <br><a href="javascript:;" id="PO3LECf251O">Oxide</a></td>
-          <td><a href="javascript:;" id="PO3HECf251">Normal</a>
-          <br><a href="javascript:;" id="PO3HECf251O">Oxide</a></td>
-        </tr>
       </table></div>
-      <div>
-        For ExtremeReactors' Yellorium or Blutonium, click LEU-235 Normal and then click <a href="javascript:;" id="br">here</a> once.<br>
-        For IC2's Enriched Uranium Nuclear Fuel, click LEU-235 Normal and then click <a href="javascript:;" id="ic2">here</a> once.<br>
-        For IC2's MOX Nuclear Fuel, click MOX-239 and then click <a href="javascript:;" id="ic2mox">here</a> once.
-      </div>
       <div>
         <b>Step 3</b>: If you want to limit the usage of a type of block, enter the maximum number allowed in the table below.
         Enter zero to completely disable that block. You can hover over the acronym to see the full name of each block.
@@ -248,9 +131,15 @@
           <th class="Wt">Wt</th><th class="Rs">Rs</th><th class="Qz">Qz</th>
           <th class="Au">Au</th><th class="Gs">Gs</th><th class="Lp">Lp</th>
           <th class="Dm">Dm</th><th class="He">He</th><th class="Ed">Ed</th>
-          <th class="Cr">Cr</th><th class="Fe">Fe</th><th class="Em">Em</th>
+          <th class="Cy">Cy</th><th class="Fe">Fe</th><th class="Em">Em</th>
           <th class="Cu">Cu</th><th class="Sn">Sn</th><th class="Mg">Mg</th>
-          <th class="cell">[]</th><th class="mod">##</th>
+          <th class="Al">Al</th><th class="As">As</th><th class="B">B</th>
+          <th class="ES">ES</th><th class="Ft">Ft</th><th class="Pb">Pb</th>
+          <th class="N">N</th><th class="Li">Li</th><th class="Mn">Mn</th>
+          <th class="NB">NB</th><th class="Nr">Nr</th><th class="Ob">Ob</th>
+          <th class="Pm">Pm</th><th class="Pp">Pp</th><th class="Ag">Ag</th>
+          <th class="Sl">Sl</th>
+          <th class="cell">[]</th><th class="mod">##</th><th class="irrd">@@</th>
         </tr></thead>
         <tbody>
           <tr id="rate"><th>Cooling Rate (H/t)</th>
@@ -259,7 +148,13 @@
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
-            <td>&mdash;</td><td>&mdash;</td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td>
+            <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>
           </tr>
           <tr id="limit"><th>Max Allowed</th>
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
@@ -267,7 +162,13 @@
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
-            <td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text">
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
           </tr>
           <tr id="activeRate"><th>Active Rate (H/t)</th>
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
@@ -275,7 +176,13 @@
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
             <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
-            <td>&mdash;</td><td>&mdash;</td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="text"></td><td>
+            <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>
           </tr>
           <tr id="activeLimit"><th>Max Active Allowed</th>
             <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
@@ -283,16 +190,20 @@
             <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
             <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
             <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
-            <td>&mdash;</td><td>&mdash;</td>
+            <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
+            <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
+            <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
+            <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
+            <td><input type="text" value="0"></td><td><input type="text" value="0"></td><td><input type="text" value="0"></td>
+            <td><input type="text" value="0">
+            <td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>
           </tr>
         </tbody>
       </table>
-      <div>
-        <b>Step 4</b>: Load the cooling rate data by clicking on one of the following modpack configs:
+      <div onload="loadRatePreset()">
+        <b>Step 4 (Optional)</b>: Cooling rate data can be reset or manually modified here.
         <a href="javascript:;" id="DefRate">Default</a>
-        <a href="javascript:;" id="E2ERate">E2E</a>
-        <a href="javascript:;" id="PO3Rate">PO3</a>. Alternatively, you can enter the data yourself.
-        Passive cooling rates are in the tooltip of each cooler item. Active cooling rates are in JEI.
+        Passive cooling rates are in the tooltip of each cooler item.
       </div>
       <div>
         <b>Step 5</b>: Adjust the options below and click &ldquo;Run&rdquo; to start the optimization.<br>

@@ -64,15 +64,32 @@ input {
 .Dm {color: powderblue;}
 .He {color: lightcoral;}
 .Ed {color: teal;}
-.Cr {color: deepskyBlue;}
+.Cy {color: deepskyBlue;}
 .Fe {color: wheat;}
 .Em {color: green;}
 .Cu {color: brown;}
 .Sn {color: lightsteelblue;}
 .Mg {color: pink;}
-.air {color: white;}
+.Al {color: rgb(137, 184, 255);}
+.As {color: rgb(160, 151, 101);}
+.B {color: rgb(139, 255, 62);}
+.ES {color: rgb(199, 196, 39);}
+.Ft {color: rgb(145, 137, 255);}
+.Pb {color: rgb(31, 31, 31);}
+.N {color: rgb(0, 90, 224);}
+.Li {color: rgb(214, 214, 214);}
+.Mn {color: rgb(69, 0, 109);}
+.NB {color: #570404;}
+.Nt {color: rgb(36, 0, 0);}
+.Ob {color: #2a0035;}
+.Pm {color: rgb(0, 146, 146);}
+.Pp {color: rgb(214, 153, 255);}
+.Ag {color: rgb(240, 240, 240);}
+.Sl {color: rgb(62, 255, 120);}
 .cell {color: gray;}
 .mod {color: black;}
+.irrd {color: rgb(77, 22, 22);}
+.air {color: white;}
 
 #design>* {
   float: left;

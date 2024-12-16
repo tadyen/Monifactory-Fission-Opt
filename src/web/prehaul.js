@@ -185,6 +185,9 @@ $(() => { FissionOpt().then((FissionOpt) => {
     fuelBasePower.val(fuelBasePower.val() * factor);
     fuelBaseHeat.val(fuelBaseHeat.val() * factor);
   };
+  $('#br').click(() => { applyFuelFactor(8 / 9); });
+  $('#ic2').click(() => { applyFuelFactor(18 / 19); });
+  $('#ic2mox').click(() => { applyFuelFactor(9 / 7); });
   
   const rates = [], limits = [];
   $('#rate input').each(function() { rates.push($(this)); });
@@ -201,14 +204,16 @@ $(() => { FissionOpt().then((FissionOpt) => {
     $.each(rates, (i, x) => { x.val(preset[i]); });
   };
   $('#DefRate').click(() => { loadRatePreset([
-    // normal coolers
-    // Wt -> Mg (15)
     60, 90, 90, 120, 130, 120, 150, 140, 120, 160, 80, 160, 80, 120, 110,
-    // Al -> Sl (16)
-    175, 135, 160, 40, 160, 60, 185, 130, 150, 70, 150, 40, 115, 95, 170, 145,
-    // active cooler TODO fix up vals
-    150, 3200, 3000, 4800, 4000, 2800, 7000, 6600, 5400, 6400, 2400, 3600, 2600, 3000, 3600,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    150, 3200, 3000, 4800, 4000, 2800, 7000, 6600, 5400, 6400, 2400, 3600, 2600, 3000, 3600
+  ]); });
+  $('#E2ERate').click(() => { loadRatePreset([
+    20, 80, 80, 120, 120, 100, 120, 120, 140, 140, 60, 140, 60, 80, 100,
+    50, 1000, 1500, 1750, 2000, 2250, 3500, 3300, 2750, 3250, 1700, 2750, 1125, 1250, 2000
+  ]); });
+  $('#PO3Rate').click(() => { loadRatePreset([
+    40, 160, 160, 240, 240, 200, 240, 240, 280, 800, 120, 280, 120, 160, 200,
+    50, 1600, 20000, 4000, 2700, 3200, 3500, 3300, 2700, 3200, 1200, 1800, 1300, 1500, 1800
   ]); });
 
   const schedule = () => {
@@ -218,24 +223,19 @@ $(() => { FissionOpt().then((FissionOpt) => {
   const settings = new FissionOpt.FissionSettings();
   const design = $('#design');
   const save = $('#save');
-  const nCoolerTypes = 31;
-  const air = nCoolerTypes * 2 + 3;
-  const tileNames = ['Wt', 'Rs', 'Qz', 'Au', 'Gs', 'Lp', 'Dm', 'He', 'Ed', 'Cy', 'Fe', 'Em', 'Cu', 'Sn', 'Mg', 'Al', 'As', 'B', 'ES', 'Ft', 'Pb', 'N', 'Li', 'Mn', 'NB', 'Nr', 'Ob', 'Pm', 'Pp', 'Ag', 'Sl','[]', '##', '..', '@@'];
+  const nCoolerTypes = 15, air = nCoolerTypes * 2 + 2;
+  const tileNames = ['Wt', 'Rs', 'Qz', 'Au', 'Gs', 'Lp', 'Dm', 'He', 'Ed', 'Cr', 'Fe', 'Em', 'Cu', 'Sn', 'Mg', '[]', '##', '..'];
   const tileTitles = ['Water', 'Redstone', 'Quartz', 'Gold', 'Glowstone', 'Lapis', 'Diamond', 'Liquid Helium',
-    'Enderium', 'Cryotheum', 'Iron', 'Emerald', 'Copper', 'Tin', 'Magnesium', 'Aluminium', 'Arsenic', 'Boron', 'EndStone', 'Fluorite', 'Lead', 'Liquid Nitrogen', 'Lithium', 'Manganese', 'Nether Brick', 'Netherrite', 'Obsidian', 'Prismarine', 'Purpur', 'Silver', 'Slime', 'Reactor Cell', 'Moderator', 'Irradiation Chamber', 'Air'];
+    'Enderium', 'Cryotheum', 'Iron', 'Emerald', 'Copper', 'Tin', 'Magnesium', 'Reactor Cell', 'Moderator', 'Air'];
   $('#blockType>:not(:first)').each((i, x) => { $(x).attr('title', tileTitles[i]); });
   const tileClasses = tileNames.slice();
-  tileClasses[nCoolerTypes] = 'cell';
-  tileClasses[nCoolerTypes + 1] = 'mod';
-  tileClasses[nCoolerTypes + 2] = 'irrd';
-  tileClasses[nCoolerTypes + 3] = 'air';
+  tileClasses[15] = 'cell';
+  tileClasses[16] = 'mod';
+  tileClasses[17] = 'air';
   const tileSaveNames = tileTitles.slice(0, 17);
-  // Overwrite names
   tileSaveNames[7] = 'Helium';
-  tileSaveNames[21] = 'Nitrogen';
-  tileSaveNames[nCoolerTypes] = 'FuelCell';
-  tileSaveNames[nCoolerTypes + 1] = 'Graphite';
-  tileSaveNames[nCoolerTypes + 2] = 'Irradiator';
+  tileSaveNames[15] = 'FuelCell';
+  tileSaveNames[16] = 'Graphite';
 
   const displayTile = (tile) => {
     let active = false;
