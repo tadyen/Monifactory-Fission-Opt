@@ -213,23 +213,21 @@ $(() => { FissionOpt().then((FissionOpt) => {
   const design = $('#design');
   const save = $('#save');
   const nCoolerTypes = 31;
-  const air = nCoolerTypes * 2 + 3;
-  const tileNames = ['Wt', 'Rs', 'Qz', 'Au', 'Gs', 'Lp', 'Dm', 'He', 'Ed', 'Cy', 'Fe', 'Em', 'Cu', 'Sn', 'Mg', 'Al', 'As', 'B', 'ES', 'Ft', 'Pb', 'N', 'Li', 'Mn', 'NB', 'Nr', 'Ob', 'Pm', 'Pp', 'Ag', 'Sl','[]', '##', '..', '@@'];
+  const air = nCoolerTypes * 2 + 2;
+  const tileNames = ['Wt', 'Rs', 'Qz', 'Au', 'Gs', 'Lp', 'Dm', 'He', 'Ed', 'Cy', 'Fe', 'Em', 'Cu', 'Sn', 'Mg', 'Al', 'As', 'B', 'ES', 'Ft', 'Pb', 'N', 'Li', 'Mn', 'NB', 'Nr', 'Ob', 'Pm', 'Pp', 'Ag', 'Sl','[]', '##', '..'];
   const tileTitles = ['Water', 'Redstone', 'Quartz', 'Gold', 'Glowstone', 'Lapis', 'Diamond', 'Liquid Helium',
-    'Enderium', 'Cryotheum', 'Iron', 'Emerald', 'Copper', 'Tin', 'Magnesium', 'Aluminium', 'Arsenic', 'Boron', 'EndStone', 'Fluorite', 'Lead', 'Liquid Nitrogen', 'Lithium', 'Manganese', 'Nether Brick', 'Netherrite', 'Obsidian', 'Prismarine', 'Purpur', 'Silver', 'Slime', 'Reactor Cell', 'Moderator', 'Irradiation Chamber', 'Air'];
+    'Enderium', 'Cryotheum', 'Iron', 'Emerald', 'Copper', 'Tin', 'Magnesium', 'Aluminium', 'Arsenic', 'Boron', 'EndStone', 'Fluorite', 'Lead', 'Liquid Nitrogen', 'Lithium', 'Manganese', 'Nether Brick', 'Netherrite', 'Obsidian', 'Prismarine', 'Purpur', 'Silver', 'Slime', 'Reactor Cell', 'Moderator', 'Air'];
   $('#blockType>:not(:first)').each((i, x) => { $(x).attr('title', tileTitles[i]); });
   const tileClasses = tileNames.slice();
   tileClasses[nCoolerTypes] = 'cell';
   tileClasses[nCoolerTypes + 1] = 'mod';
-  tileClasses[nCoolerTypes + 2] = 'irrd';
-  tileClasses[nCoolerTypes + 3] = 'air';
+  tileClasses[nCoolerTypes + 2] = 'air';
   const tileSaveNames = tileTitles.slice(0, 17);
   // Overwrite names
   tileSaveNames[7] = 'Helium';
   tileSaveNames[21] = 'Nitrogen';
   tileSaveNames[nCoolerTypes] = 'FuelCell';
   tileSaveNames[nCoolerTypes + 1] = 'Graphite';
-  tileSaveNames[nCoolerTypes + 2] = 'Irradiator';
 
   const displayTile = (tile) => {
     let active = false;

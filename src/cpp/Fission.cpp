@@ -266,7 +266,9 @@ namespace Fission {
           switch (rules(x, y, z)) {
             case Silver:
               isActive(x, y, z) = countActiveNeighbors(Glowstone, x, y, z) >= 2
-                && ( countActiveNeighbors(Tin, x, y, z) || countNeighbors(Irradiator, x, y, z) );
+                // irradiator disabled
+                // && ( countActiveNeighbors(Tin, x, y, z) || countActiveNeighbors(Irradiator, x, y, z) );
+                && countActiveNeighbors(Tin, x, y, z);
               break;
             case Prismarine:
               isActive(x, y, z) = countActiveNeighbors(Water, x, y, z);
@@ -305,10 +307,11 @@ namespace Fission {
             case Netherbrick:
               isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z);
               break;
-            case Netherite:
-              isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z)
-                && countNeighbors(Irradiator, x, y, z);
-              break;
+            // Irradiator disabled
+            // case Netherite:
+            //   isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z)
+            //     && countActiveNeighbors(Irradiator, x, y, z);
+            //   break;
             case Fluorite:
               isActive(x, y, z) = countActiveNeighbors(Gold, x, y, z)
                 && countActiveNeighbors(Prismarine, x, y, z);
