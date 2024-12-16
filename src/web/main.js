@@ -222,7 +222,7 @@ $(() => { FissionOpt().then((FissionOpt) => {
   tileClasses[nCoolerTypes] = 'cell';
   tileClasses[nCoolerTypes + 1] = 'mod';
   tileClasses[nCoolerTypes + 2] = 'air';
-  const tileSaveNames = tileTitles.slice(0, 17);
+  const tileSaveNames = tileTitles.slice(0, tileTitles.length()-1);
   // Overwrite names
   tileSaveNames[7] = 'Helium';
   tileSaveNames[21] = 'Nitrogen';
