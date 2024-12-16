@@ -21,4 +21,4 @@ echo "compile.sh: em++: compile finished";
 
 # copy web files out for github pages to run
 # cp -f ./src/web/*.{html,css,js,wasm} ./ ;
-cp -f ./src/web/{index.html,main.js,main.css,FissionOpt.js} ./;
+cp -f ./src/web/{index.html,main.js,main.css,FissionOpt.js,FissionOpt.wasm} ./;
