@@ -157,7 +157,7 @@ namespace Fission {
             rules(x, y, z) = -1;
             ++result.breed;
             result.powerMult += mult;
-            result.heatMult += mult * (mult + 1) / 2.0;
+            result.heatMult += 3 * (mult - 1);
           } else {
             mults(x, y, z) = 0;
             if (tile < Active) {
