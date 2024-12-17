@@ -12,13 +12,16 @@
   <body>
     <header>
       <div>
-        <h2>NC Fission Reactor Design Generator</h2>
+        <h2>NC-Neoteric Fission Reactor Designer</h2>
         original by cyb0124, modified by tadyen <a href="https://github.com/tadyen/FissionOpt">source</a>
       </div>
+      <br></br>
       <div>
         This tool generates a fission reactor design that maximizes effective power output, breeding speed or efficiency.
-        This page is for <a href="https://github.com/igentuman/NuclearCraft-Neoteric">NC Neoteric</a> version of Nuclearcraft, used in the <a href="https://github.com/ThePansmith/Monifactory">Monifactory</a> modpack.
-        For the pre-modified version of this optimiser, click <a href="https://leu-235.com/">here</a> instead.
+
+        Modified for use for <a href="https://github.com/igentuman/NuclearCraft-Neoteric">NC Neoteric</a> version of Nuclearcraft in the <a href="https://github.com/ThePansmith/Monifactory">Monifactory</a> modpack.
+        
+        For the original version of this optimiser, click <a href="https://leu-235.com/">here</a> instead.
       </div>
     </header>
     <section id="settings">
@@ -29,99 +32,41 @@
         <input type="text" id="sizeY">
       </div>
       <div>
-        <b>Step 2</b>: Default values loaded. Most modpacks use the default config, except for E2E and PO3. You can manually enter the fuel data in the textboxes below.
-        The fuel data can be found in the tooltip of the fuel item.
+        <b>Step 2</b>: Select the fuel to be used, or manually input fuel specifications.
       </div>
       <div>Fuel Base Power: <input type="text" id="fuelBasePower"> RF/t</div>
       <div>Fuel Base Heat: <input text="text" id="fuelBaseHeat"> H/t</div>
       <div class="fuelPresets"><table>
-        <thead><tr><td>Config</td>
-          <td>Uranium Ingot</td>
-          <td>TBU</td>
-          <td>LEU-235</td>
-          <td>HEU-235</td>
-          <td>LEU-233</td>
-          <td>HEU-233</td>
-          <td>LEN-236</td>
-          <td>HEN-236</td>
-          <td>MOX-239</td>
-          <td>MOX-241</td>
-          <td>LEP-239</td>
-          <td>HEP-239</td>
-          <td>LEP-241</td>
-          <td>HEP-241</td>
-          <td>LEA-242</td>
-          <td>HEA-242</td>
-          <td>LECm-243</td>
-          <td>HECm-243</td>
-          <td>LECm-245</td>
-          <td>HECm-245</td>
-          <td>LECm-247</td>
-          <td>HECm-247</td>
-          <td>LEB-248</td>
-          <td>HEB-248</td>
-          <td>LECf-249</td>
-          <td>HECf-249</td>
-          <td>LECf-251</td>
-          <td>HECf-251</td>
-        </tr></thead>
-        <tr><th>Default</th>
-          <td>&mdash;</td>
-          <td><a href="javascript:;" id="DefTBU">Normal</a>
-          <br><a href="javascript:;" id="DefTBUO">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLEU235">Normal</a>
-          <br><a href="javascript:;" id="DefLEU235O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHEU235">Normal</a>
-          <br><a href="javascript:;" id="DefHEU235O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLEU233">Normal</a>
-          <br><a href="javascript:;" id="DefLEU233O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHEU233">Normal</a>
-          <br><a href="javascript:;" id="DefHEU233O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLEN236">Normal</a>
-          <br><a href="javascript:;" id="DefLEN236O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHEN236">Normal</a>
-          <br><a href="javascript:;" id="DefHEN236O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefMOX239">Load</a></td>
-          <td><a href="javascript:;" id="DefMOX241">Load</a></td>
-          <td><a href="javascript:;" id="DefLEP239">Normal</a>
-          <br><a href="javascript:;" id="DefLEP239O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHEP239">Normal</a>
-          <br><a href="javascript:;" id="DefHEP239O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLEP241">Normal</a>
-          <br><a href="javascript:;" id="DefLEP241O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHEP241">Normal</a>
-          <br><a href="javascript:;" id="DefHEP241O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLEA242">Normal</a>
-          <br><a href="javascript:;" id="DefLEA242O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHEA242">Normal</a>
-          <br><a href="javascript:;" id="DefHEA242O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLECm243">Normal</a>
-          <br><a href="javascript:;" id="DefLECm243O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHECm243">Normal</a>
-          <br><a href="javascript:;" id="DefHECm243O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLECm245">Normal</a>
-          <br><a href="javascript:;" id="DefLECm245O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHECm245">Normal</a>
-          <br><a href="javascript:;" id="DefHECm245O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLECm247">Normal</a>
-          <br><a href="javascript:;" id="DefLECm247O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHECm247">Normal</a>
-          <br><a href="javascript:;" id="DefHECm247O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLEB248">Normal</a>
-          <br><a href="javascript:;" id="DefLEB248O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHEB248">Normal</a>
-          <br><a href="javascript:;" id="DefHEB248O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLECf249">Normal</a>
-          <br><a href="javascript:;" id="DefLECf249O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHECf249">Normal</a>
-          <br><a href="javascript:;" id="DefHECf249O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefLECf251">Normal</a>
-          <br><a href="javascript:;" id="DefLECf251O">Oxide</a></td>
-          <td><a href="javascript:;" id="DefHECf251">Normal</a>
-          <br><a href="javascript:;" id="DefHECf251O">Oxide</a></td>
+        <tr>
+          <td>Fuel</td>
+          <td><a href="javascript:;" id="TBU">TBU</a>
+          <td><a href="javascript:;" id="LEU235">LEU-235</a>
+          <td><a href="javascript:;" id="HEU235">HEU-235</a>
+          <td><a href="javascript:;" id="LEU233">LEU-233</a>
+          <td><a href="javascript:;" id="HEU233">HEU-233</a>
+          <td><a href="javascript:;" id="LEN236">LEN-236</a>
+          <td><a href="javascript:;" id="HEN236">HEN-236</a>
+          <td><a href="javascript:;" id="LEP239">LEP-239</a>
+          <td><a href="javascript:;" id="HEP239">HEP-239</a>
+          <td><a href="javascript:;" id="LEP241">LEP-241</a>
+          <td><a href="javascript:;" id="HEP241">HEP-241</a>
+          <td><a href="javascript:;" id="LEA242">LEA-242</a>
+          <td><a href="javascript:;" id="HEA242">HEA-242</a>
+          <td><a href="javascript:;" id="LECm243">LECm-243</a>
+          <td><a href="javascript:;" id="HECm243">HECm-243</a>
+          <td><a href="javascript:;" id="LECm245">LECm-245</a>
+          <td><a href="javascript:;" id="HECm245">HECm-245</a>
+          <td><a href="javascript:;" id="LECm247">LECm-247</a>
+          <td><a href="javascript:;" id="HECm247">HECm-247</a>
+          <td><a href="javascript:;" id="LEB248">LEB-248</a>
+          <td><a href="javascript:;" id="HEB248">HEB-248</a>
+          <td><a href="javascript:;" id="LECf249">LECf-249</a>
+          <td><a href="javascript:;" id="HECf249">HECf-249</a>
+          <td><a href="javascript:;" id="LECf251">LECf-251</a>
+          <td><a href="javascript:;" id="HECf251">HECf-251</a>
         </tr>
       </table></div>
-      <div>
+      <div id="divStep3" class="divStep">
         <b>Step 3</b>: If you want to limit the usage of a type of block, enter the maximum number allowed in the table below.
         Enter zero to completely disable that block. You can hover over the acronym to see the full name of each block.
         Active coolers are disabled by default. You can enable them by removing the zeros.
@@ -200,12 +145,12 @@
           </tr>
         </tbody>
       </table>
-      <div>
+      <div id="divStep4" class="divStep">
         <b>Step 4 (Optional)</b>: Cooling rate data can be reset or manually modified here.
         <a href="javascript:;" id="DefRate">Default</a>
         Passive cooling rates are in the tooltip of each cooler item.
       </div>
-      <div>
+      <div id="divStep5" class="divStep"></div>
         <b>Step 5</b>: Adjust the options below and click &ldquo;Run&rdquo; to start the optimization.<br>
         <label><input type="checkbox" id="ensureActiveCoolerAccessible" checked>Ensure active coolers are accessible by piping.</label><br>
         <label><input type="checkbox" id="ensureHeatNeutral" checked>Only generate heat neutral reactor.</label><br>
@@ -216,14 +161,16 @@
         <label><input type="checkbox" id="symX" checked>Y symmetry</label>
         <label><input type="checkbox" id="symY" checked>Z symmetry</label><br>
         <label><input type="checkbox" id="useNet" checked>Use reinforcement learning (requires more memory, slightly slower but can produce better design)</label><br>
-        The most efficient reactor doesn't produce the most power. To get a efficient reactor that can still generate lots of power,
-        you should optimize for power while limiting the cell count using the &ldquo;Max Allowed&rdquo; box for <span class="row cell" title="Reactor Cell">[]</span>.
-        To get the ideal cell count, divide the fuel's base processing time by the time you want a fuel to last.
-        Enabling symmetry and/or limiting block counts often speeds up the algorithm.
-        The algorithm uses fixed seed: different runs will always yield the same results unless there is an update to the algorithm (last update: 5/19/2020).
-        You can use <a href="https://www.curseforge.com/minecraft/mc-mods/building-gadgets">Building Gadgets</a> to automate the building of your reactor.
-        To do so, save the JSON of your design, load it up in <a href="https://github.com/hellrage/NC-Reactor-Planner/releases/tag/v1.2.25">Hellrage's Reactor Planner</a>,
-        and then click &ldquo;Generate BG string&rdquo;. Then you can paste it in the <a href="https://github.com/Direwolf20-MC/BuildingGadgets/wiki/Template-Manager">Template Manager</a>.<br>
+        <div>
+          The most efficient reactor doesn't produce the most power. To get a efficient reactor that can still generate lots of power,
+          you should optimize for power while limiting the cell count using the &ldquo;Max Allowed&rdquo; box for <span class="row cell" title="Reactor Cell">[]</span>.
+          To get the ideal cell count, divide the fuel's base processing time by the time you want a fuel to last.
+          Enabling symmetry and/or limiting block counts often speeds up the algorithm.
+          The algorithm uses fixed seed: different runs will always yield the same results unless there is an update to the algorithm (last update: 5/19/2020).
+          You can use <a href="https://www.curseforge.com/minecraft/mc-mods/building-gadgets">Building Gadgets</a> to automate the building of your reactor.
+          To do so, save the JSON of your design, load it up in <a href="https://github.com/hellrage/NC-Reactor-Planner/releases/tag/v1.2.25">Hellrage's Reactor Planner</a>,
+          and then click &ldquo;Generate BG string&rdquo;. Then you can paste it in the <a href="https://github.com/Direwolf20-MC/BuildingGadgets/wiki/Template-Manager">Template Manager</a>.<br>  
+        </div>
         <span style="color:red;">Note: in Chrome, this tab won't run in background! If you want to switch to other tabs, drag this tab out as a dedicated window and don't minimize it.</span>
       </div>
     </section>
