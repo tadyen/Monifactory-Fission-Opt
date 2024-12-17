@@ -46,8 +46,62 @@ $(() => { FissionOpt().then((FissionOpt) => {
       fuelBasePower.val(power);
       fuelBaseHeat.val(heat);
     });
-  }
+  };
   
+  const schedule = () => {
+    timeout = window.setTimeout(step, 0);
+  };
+  
+  // Order of entries matters
+  const heatSinks = [
+    {name: "Wt", title:"Water", rate:60, activeRate:150},
+    {name: "Rs", title:"Redstone", rate:90, activeRate:270},
+    {name: "Qz", title:"Quartz", rate:90, activeRate:0},
+    {name: "Au", title:"Gold", rate:120, activeRate:0},
+    {name: "Gs", title:"Glowstone", rate:130, activeRate:0},
+    {name: "Lp", title:"Lapis", rate:120, activeRate:0},
+    {name: "Dm", title:"Diamond", rate:150, activeRate:0},
+    {name: "He", title:"Liquid Helium", rate:140, activeRate:420},
+    {name: "Ed", title:"Enderium", rate:120, activeRate:360},
+    {name: "Cy", title:"Cryotheum", rate:160, activeRate:480},
+    {name: "Fe", title:"Iron", rate:80, activeRate:0},
+    {name: "Em", title:"Emerald", rate:160, activeRate:0},
+    {name: "Cu", title:"Copper", rate:80, activeRate:0},
+    {name: "Sn", title:"Tin", rate:120, activeRate:0},
+    {name: "Mg", title:"Magnesium", rate:110, activeRate:0},
+    {name: "Al", title:"Aluminium", rate:175, activeRate:0},
+    {name: "As", title:"Arsenic", rate:135, activeRate:0},
+    {name: "B", title:"Boron", rate:160, activeRate:0},
+    {name: "ES", title:"EndStone", rate:40, activeRate:0},
+    {name: "Ft", title:"Fluorite", rate:160, activeRate:0},
+    {name: "Pb", title:"Lead", rate:60, activeRate:0},
+    {name: "N", title:"Liquid Nitrogen", rate:185, activeRate:0},
+    {name: "Li", title:"Lithium", rate:130, activeRate:0},
+    {name: "Mn", title:"Manganese", rate:150, activeRate:0},
+    {name: "NB", title:"Nether Brick", rate:70, activeRate:0},
+    {name: "Nr", title:"Netherite", rate:150, activeRate:0},
+    {name: "Ob", title:"Obsidian", rate:40, activeRate:0},
+    {name: "Pm", title:"Prismarine", rate:115, activeRate:0},
+    {name: "Pp", title:"Purpur", rate:95, activeRate:0},
+    {name: "Ag", title:"Silver", rate:170, activeRate:0},
+    {name: "Sl", title:"Slime", rate:145, activeRate:0},
+  ];
+  const otherBlocks = [
+    {name: "[]", title:"Reactor Cell"},
+    {name: "##", title:"Moderator"},
+    {name: "..", title:"Air"},
+  ];
+  const nCoolerTypes = heatSinks.length;
+  const air = nCoolerTypes*2 + otherBlocks.length - 1;
+  const tileNames = [ ...heatSinks.map((e)=>e.name), ...otherBlocks.map((e)=>e.name) ];
+  const tileTitles = [ ...heatSinks.map((e)=>e.title), ...otherBlocks.map((e)=>e.title) ];
+  
+  // class names for css
+  const tileClasses = tileNames.slice();
+  tileClasses[nCoolerTypes] = 'cell';
+  tileClasses[nCoolerTypes + 1] = 'mod';
+  tileClasses[nCoolerTypes + 2] = 'air';
+
   const rates = [], limits = [];
   $('#rate input').each(function() { rates.push($(this)); });
   $('#activeRate input').each(function() { rates.push($(this)); });
@@ -62,40 +116,18 @@ $(() => { FissionOpt().then((FissionOpt) => {
       return;
     $.each(rates, (i, x) => { x.val(preset[i]); });
   };
-  $('#DefRate').click(() => { loadRatePreset([
-    // normal coolers
-    // Wt -> Mg (15)
-    60, 90, 90, 120, 130, 120, 150, 140, 120, 160, 80, 160, 80, 120, 110,
-    // Al -> Sl (16)
-    175, 135, 160, 40, 160, 60, 185, 130, 150, 70, 150, 40, 115, 95, 170, 145,
-    // active cooler TODO fix up vals
-    150, 3200, 3000, 4800, 4000, 2800, 7000, 6600, 5400, 6400, 2400, 3600, 2600, 3000, 3600,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-  ]); });
-
-  const schedule = () => {
-    timeout = window.setTimeout(step, 0);
-  };
-
-  const settings = new FissionOpt.FissionSettings();
-  const design = $('#design');
-  const save = $('#save');
-  const nCoolerTypes = 31;
-  const air = nCoolerTypes * 2 + 2;
-  const tileNames = ['Wt', 'Rs', 'Qz', 'Au', 'Gs', 'Lp', 'Dm', 'He', 'Ed', 'Cy', 'Fe', 'Em', 'Cu', 'Sn', 'Mg', 'Al', 'As', 'B', 'ES', 'Ft', 'Pb', 'N', 'Li', 'Mn', 'NB', 'Nr', 'Ob', 'Pm', 'Pp', 'Ag', 'Sl','[]', '##', '..'];
-  const tileTitles = ['Water', 'Redstone', 'Quartz', 'Gold', 'Glowstone', 'Lapis', 'Diamond', 'Liquid Helium',
-    'Enderium', 'Cryotheum', 'Iron', 'Emerald', 'Copper', 'Tin', 'Magnesium', 'Aluminium', 'Arsenic', 'Boron', 'EndStone', 'Fluorite', 'Lead', 'Liquid Nitrogen', 'Lithium', 'Manganese', 'Nether Brick', 'Netherrite', 'Obsidian', 'Prismarine', 'Purpur', 'Silver', 'Slime', 'Reactor Cell', 'Moderator', 'Air'];
-  $('#blockType>:not(:first)').each((i, x) => { $(x).attr('title', tileTitles[i]); });
-  const tileClasses = tileNames.slice();
-  tileClasses[nCoolerTypes] = 'cell';
-  tileClasses[nCoolerTypes + 1] = 'mod';
-  tileClasses[nCoolerTypes + 2] = 'air';
-  const tileSaveNames = tileTitles.slice(0, tileTitles.length - 1);
+  $('#DefRate').click(()=>{ loadRatePreset([ ...heatSinks.map((e)=>e.rate), ...heatSinks.map((e)=>e.activeRate) ]) });
   // Overwrite names
+  const tileSaveNames = tileTitles.slice();
   tileSaveNames[7] = 'Helium';
   tileSaveNames[21] = 'Nitrogen';
   tileSaveNames[nCoolerTypes] = 'FuelCell';
   tileSaveNames[nCoolerTypes + 1] = 'Graphite';
+  
+  const settings = new FissionOpt.FissionSettings();
+  const design = $('#design');
+  const save = $('#save');
+  $('#blockType>:not(:first)').each((i, x) => { $(x).attr('title', tileTitles[i]); });
 
   const displayTile = (tile) => {
     let active = false;
@@ -104,7 +136,11 @@ $(() => { FissionOpt().then((FissionOpt) => {
       if (tile < nCoolerTypes)
         active = true;
     }
-    const result = $('<span>' + tileNames[tile] + '</span>').addClass(tileClasses[tile]);
+    const result = $(
+      '<span>' 
+      + (tileNames[tile].length == 1 ? tileNames[tile] + '&nbsp;' : tileNames[tile])
+      + '</span>'
+    ).addClass(tileClasses[tile]);
     if (active) {
       result.attr('title', 'Active ' + tileTitles[tile]);
       result.css('outline', '2px dashed black')
@@ -245,7 +281,7 @@ $(() => { FissionOpt().then((FissionOpt) => {
       };
       const parsePositiveFloat = (name, x) => {
         const result = parseFloat(x);
-        if (!(result > 0))
+        if (!(result >= 0))
           throw Error(name + " must be a positive number");
         return result;
       };
