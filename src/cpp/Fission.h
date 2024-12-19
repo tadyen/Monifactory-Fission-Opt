@@ -8,6 +8,8 @@ namespace Fission {
 
   constexpr int neutronReach(1);
   constexpr double modPower(1.0), modHeat(2.0);
+  // https://github.com/igentuman/NuclearCraft-Neoteric/blob/1.20/src/main/java/igentuman/nc/handler/config/FissionConfig.java
+  constexpr double configHeatMultiplier(3.24444444);
 
   enum {
     // Cooler
@@ -26,7 +28,9 @@ namespace Fission {
     // Active variants
     Active,
     // Other
-    Cell = Active * 2, Moderator, Air
+    Cell = Active * 2, Moderator,
+    // Air must be last
+    Air
   };
 
   enum {
@@ -44,16 +48,21 @@ namespace Fission {
     bool ensureHeatNeutral;
     int goal;
     bool symX, symY, symZ;
+    bool applyAdditionalGoals;
+    int goalNetHeat, goalFuelCells;
+    double goalDutyCycle;
+    double goalWeightPrimary, goalWeightSecondary;
+    double goalWeightNetHeat, goalWeightDutyCycle, goalWeightFuelCells;
   };
 
   struct Evaluation {
     // Raw
     Coords invalidTiles;
     double powerMult, heatMult, cooling;
-    int breed;
+    int fuelcells;
     // Computed
-    double heat, netHeat, dutyCycle, avgMult, power, avgPower, avgBreed, efficiency;
-
+    double heat, netHeat, dutyCycle, avgMult, power, avgPower, avgBreed, efficiency, breed;
+    double heatMultiplier, fitness;
     void compute(const Settings &settings);
   };
 

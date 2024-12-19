@@ -17,6 +17,7 @@ namespace Fission {
   };
 
   constexpr int interactiveMin(1024), interactiveScale(327680), interactiveNet(16), nLossHistory(256);
+  constexpr double small(1e-9), adtlWeightNetHeat(double(1<<8)), adtlWeightDutyCycle(double(1<<8)), adtlWeightFuelCells(double(1<<8));
 
   class Net;
 
@@ -42,7 +43,7 @@ namespace Fission {
     void restart();
     bool feasible(const Evaluation &x);
     double rawFitness(const Evaluation &x);
-    double currentFitness(const Sample &x);
+    double currentFitness(Sample &x);
     int getNSym(int x, int y, int z);
     void setTileWithSym(Sample &sample, int x, int y, int z, int tile);
     void mutateAndEvaluate(Sample &sample, int x, int y, int z);

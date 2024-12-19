@@ -16,8 +16,8 @@ fi
 
 # compile
 echo "compile.sh: em++: compiling...";
-em++ --bind -s MODULARIZE=1 -s EXPORT_NAME=FissionOpt -s ALLOW_MEMORY_GROWTH=1 -o ./src/web/FissionOpt.js -std=c++17 -flto -O3 ./src/web/Bindings.cpp ./src/cpp/Fission.cpp ./src/cpp/OptFission.cpp ./src/cpp/FissionNet.cpp ./src/cpp/OverhaulFission.cpp ./src/cpp/OptOverhaulFission.cpp ./src/cpp/OverhaulFissionNet.cpp -I./modules/xtl/include -I./modules/xtensor/include -v;
-echo "compile.sh: em++: compile finished";
+em++ --bind -s MODULARIZE=1 -s EXPORT_NAME=FissionOpt -s ALLOW_MEMORY_GROWTH=1 -o ./src/web/FissionOpt.js -std=c++17 -flto -O3 ./src/web/Bindings.cpp ./src/cpp/Fission.cpp ./src/cpp/OptFission.cpp ./src/cpp/FissionNet.cpp ./src/cpp/OverhaulFission.cpp ./src/cpp/OptOverhaulFission.cpp ./src/cpp/OverhaulFissionNet.cpp -I./modules/xtl/include -I./modules/xtensor/include -v \
+&& echo "compile.sh: em++: compile finished";
 
 # copy web files out for github pages to run
 # cp -f ./src/web/*.{html,css,js,wasm} ./ ;

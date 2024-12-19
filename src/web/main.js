@@ -170,6 +170,7 @@ $(() => { FissionOpt().then((FissionOpt) => {
       row.append(Math.round(value * 100) / 100);
       block.append(row);
     };
+    appendInfo('Model Fitness', sample.getFitness(), 'dimless');
     appendInfo('Max Power', sample.getPower(), 'RF/t');
     appendInfo('Heat', sample.getHeat(), 'H/t');
     appendInfo('Cooling', sample.getCooling(), 'H/t');
@@ -279,12 +280,30 @@ $(() => { FissionOpt().then((FissionOpt) => {
           throw Error("Core size must be a positive integer");
         return result;
       };
+      const parsePositiveInt = (name, x) => {
+        const result = parseInt(x);
+        if (!(result > 0))
+          throw Error(name + " must be a positive integer greater than 0");
+        return result;
+      };
       const parsePositiveFloat = (name, x) => {
         const result = parseFloat(x);
         if (!(result >= 0))
           throw Error(name + " must be a positive number");
         return result;
       };
+      const parseZeroToOneHPercent = (name, x) => {
+        const result = parseFloat(x);
+        if (!(result >=0 && result <= 100))
+          throw Error(name + " must be between 0 to 100");
+        return result;
+      }
+      const parseZeroToOne = (name, x) => {
+        const result = parseFloat(x);
+        if (!(result >= 0 && result <= 1))
+          throw Error(name + " must be between 0 to 1");
+        return result;
+      }
       try {
         settings.sizeX = parseSize($('#sizeX').val());
         settings.sizeY = parseSize($('#sizeY').val());
@@ -293,7 +312,18 @@ $(() => { FissionOpt().then((FissionOpt) => {
         settings.fuelBaseHeat = parsePositiveFloat('Fuel Base Heat', fuelBaseHeat.val());
         settings.ensureActiveCoolerAccessible = $('#ensureActiveCoolerAccessible').is(':checked');
         settings.ensureHeatNeutral = $('#ensureHeatNeutral').is(':checked');
+        settings.applyAdditionalGoals = $('#applyAdditionalGoals').is(':checked');
         settings.goal = parseInt($('input[name=goal]:checked').val());
+        if(settings.applyAdditionalGoals){
+          settings.goalWeightPrimary = parseZeroToOne('Weight Primary', $('#goalWeightPrimary').val());
+          settings.goalWeightSecondary = parseZeroToOne('Weight Secondary',  $('#goalWeightSecondary').val());
+          settings.goalNetHeat = parseInt($('#goalNetHeat').val());
+          settings.goalDutyCycle = parseZeroToOneHPercent('target Duty Cycle', $('#goalDutyCycle').val()) / 100;
+          settings.goalFuelCells = parsePositiveInt('target Fuel Cells', $('#goalFuelCells').val());
+          settings.goalWeightNetHeat = parseZeroToOne('target Net Heat weight', $('#goalWeightNetHeat').val());
+          settings.goalWeightDutyCycle = parseZeroToOne('target Duty Cycle weight', $('#goalWeightDutyCycle').val());
+          settings.goalWeightFuelCells = parseZeroToOne('target Fuel Cells weight', $('#goalWeightFuelCells').val());
+        }
         settings.symX = $('#symX').is(':checked');
         settings.symY = $('#symY').is(':checked');
         settings.symZ = $('#symZ').is(':checked');

@@ -1,3 +1,4 @@
+#include <cmath>
 #include <xtensor/xview.hpp>
 #include "Fission.h"
 
@@ -9,6 +10,16 @@ namespace Fission {
     avgMult = powerMult * dutyCycle;
     power = powerMult * settings.fuelBasePower;
     avgPower = power * dutyCycle;
+    // https://github.com/igentuman/NuclearCraft-Neoteric/blob/2eb978d7af8860a73645993c7ea4a6fd9f5aa27c/src/main/java/igentuman/nc/block/entity/fission/FissionControllerBE.java#L627
+    // just a simplification applied here
+    heatMultiplier = heat / std::fmax(cooling, 1);
+    heatMultiplier = 
+      1.0
+      + std::log10(heatMultiplier) 
+      / std::exp(heatMultiplier * configHeatMultiplier);
+    breed = settings.ensureHeatNeutral 
+      ? fuelcells 
+      : fuelcells * heatMultiplier;
     avgBreed = breed * dutyCycle;
     efficiency = breed ? powerMult / breed : 1.0;
   }
@@ -142,6 +153,7 @@ namespace Fission {
     result.heatMult = 0.0;
     result.cooling = 0.0;
     result.breed = 0;
+    result.fuelcells = 0;
     isActive.fill(false); // Refers to 'in-use' as opposed to active-type HSinks
     isModeratorInLine.fill(false);
     this->state = &state;
@@ -155,8 +167,10 @@ namespace Fission {
             int mult(countMult(x, y, z));
             mults(x, y, z) = mult;
             rules(x, y, z) = -1;
-            ++result.breed;
+            ++result.fuelcells;
             result.powerMult += mult;
+
+            // https://github.com/igentuman/NuclearCraft-Neoteric/blob/2eb978d7af8860a73645993c7ea4a6fd9f5aa27c/src/main/java/igentuman/nc/multiblock/fission/FissionReactorMultiblock.java#L237C1-L237C26
             result.heatMult += 3 * (mult - 1);
           } else {
             mults(x, y, z) = 0;
@@ -340,7 +354,7 @@ namespace Fission {
           }
         }
       }
-    }
+  }
 
     // mark HSinks that depend on above set as active
     for (int x{}; x < settings.sizeX; ++x) {
@@ -367,8 +381,9 @@ namespace Fission {
         for (int z{}; z < settings.sizeZ; ++z) {
           int tile((*this->state)(x, y, z));
           if (tile < Cell) {
-            if (isActive(x, y, z))
+            if (isActive(x, y, z)){
               result.cooling += settings.coolingRates[tile];
+            }
             else
               result.invalidTiles.emplace_back(x, y, z);
           }

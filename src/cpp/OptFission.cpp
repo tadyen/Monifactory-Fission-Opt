@@ -1,3 +1,8 @@
+#include "OptFission.h"
+#include <array>
+#include <cmath>
+#include <cstdlib>
+#include <vector>
 #include <xtensor/xview.hpp>
 #include "FissionNet.h"
 
@@ -49,26 +54,54 @@ namespace Fission {
   }
 
   double Opt::rawFitness(const Evaluation &x) {
+    double rawPrimary, rawSecondary;
+    double primaryWeight, secondaryWeight;
+    std::vector<std::array<double,2>> rawSecondaryParts; // value, weight
     switch (settings.goal) {
       default: // GoalPower
-        return x.avgMult;
+        rawPrimary = x.avgMult;
+        break;
       case GoalBreeder:
-        return x.avgBreed + (x.netHeat < 0 ? - x.netHeat / (settings.fuelBaseHeat - x.netHeat) : 0);
+        rawPrimary = x.avgBreed;
+        break;
       case GoalEfficiency:
-        return settings.ensureHeatNeutral ? (x.efficiency - 1) * x.dutyCycle : x.efficiency - 1;
+        rawPrimary = settings.ensureHeatNeutral ? (x.efficiency - 1) * x.dutyCycle : x.efficiency - 1;
+        break;
     }
+    if(!settings.applyAdditionalGoals){
+      return rawPrimary;
+    }
+    // additional goals stuff
+    if(settings.goalWeightSecondary < small){ return rawPrimary; };
+    if(settings.goalWeightPrimary < small){
+      primaryWeight = 0;
+      secondaryWeight = 1;
+    }else{
+      primaryWeight = settings.goalWeightPrimary;
+      secondaryWeight = settings.goalWeightSecondary;
+    }
+    // secondary parts
+    rawSecondaryParts.emplace_back(std::array<double,2>{ 1 / (1 + std::fabs(settings.goalNetHeat - x.netHeat)), settings.goalWeightNetHeat * adtlWeightNetHeat});
+    rawSecondaryParts.emplace_back(std::array<double,2>{ 1 / (1 + std::fabs(settings.goalDutyCycle - x.dutyCycle)), settings.goalWeightDutyCycle * adtlWeightDutyCycle});
+    rawSecondaryParts.emplace_back(std::array<double,2>{1 / (1 + std::fabs(settings.goalFuelCells - x.fuelcells)), settings.goalWeightFuelCells * adtlWeightFuelCells});
+    rawSecondary=0;
+    for(std::array<double,2> &x : rawSecondaryParts){ rawSecondary += x[0] * x[1]; };
+    if(rawSecondary < small){ return (rawPrimary * primaryWeight); };
+    if(primaryWeight < small){ return (rawSecondary * secondaryWeight);};
+    return (rawPrimary * primaryWeight + rawSecondary * secondaryWeight);
   }
 
-  double Opt::currentFitness(const Sample &x) {
+  double Opt::currentFitness(Sample &x) {
     if (nStage == StageInfer) {
       return net->infer(x);
     } else if (nStage == StageTrain) {
       return 0.0;
     } else if (feasible(x.value)) {
-      return rawFitness(x.value);
-    } else {
-      return rawFitness(x.value) - x.value.netHeat / settings.fuelBaseHeat * infeasibilityPenalty;
+      x.value.fitness = rawFitness(x.value);
+    } else { 
+      x.value.fitness = rawFitness(x.value) * 2 * std::erf( - x.value.netHeat / settings.fuelBaseHeat * infeasibilityPenalty);
     }
+    return x.value.fitness;
   }
 
   int Opt::getNSym(int x, int y, int z) {

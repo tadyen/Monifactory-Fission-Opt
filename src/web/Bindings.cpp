@@ -22,6 +22,10 @@ static int getStride(const Fission::Sample &x, int i) {
   return x.state.strides()[i];
 }
 
+static double getFitness(const Fission::Sample &x) {
+  return x.value.fitness;
+}
+
 static double getPower(const Fission::Sample &x) {
   return x.value.power;
 }
@@ -125,11 +129,21 @@ EMSCRIPTEN_BINDINGS(FissionOpt) {
     .function("setRate", &setRate)
     .property("ensureActiveCoolerAccessible", &Fission::Settings::ensureActiveCoolerAccessible)
     .property("ensureHeatNeutral", &Fission::Settings::ensureHeatNeutral)
+    .property("applyAdditionalGoals", &Fission::Settings::applyAdditionalGoals)
+    .property("goalWeightPrimary", &Fission::Settings::goalWeightPrimary)
+    .property("goalWeightSecondary", &Fission::Settings::goalWeightSecondary)
+    .property("goalNetHeat", &Fission::Settings::goalNetHeat)
+    .property("goalDutyCycle", &Fission::Settings::goalDutyCycle)
+    .property("goalFuelCells", &Fission::Settings::goalFuelCells)
+    .property("goalWeightNetHeat", &Fission::Settings::goalWeightNetHeat)
+    .property("goalWeightDutyCycle", &Fission::Settings::goalWeightDutyCycle)
+    .property("goalWeightFuelCells", &Fission::Settings::goalWeightFuelCells)
     .property("goal", &Fission::Settings::goal)
     .property("symX", &Fission::Settings::symX)
     .property("symY", &Fission::Settings::symY)
     .property("symZ", &Fission::Settings::symZ);
   emscripten::class_<Fission::Sample>("FissionSample")
+    .function("getFitness", &getFitness)
     .function("getData", &getData)
     .function("getShape", &getShape)
     .function("getStride", &getStride)
