@@ -12,14 +12,17 @@ namespace Fission {
     avgPower = power * dutyCycle;
     // https://github.com/igentuman/NuclearCraft-Neoteric/blob/2eb978d7af8860a73645993c7ea4a6fd9f5aa27c/src/main/java/igentuman/nc/block/entity/fission/FissionControllerBE.java#L627
     // just a simplification applied here
-    heatMultiplier = heat / std::fmax(cooling, 1);
-    heatMultiplier = 
-      1.0
-      + std::log10(heatMultiplier) 
-      / std::exp(heatMultiplier * configHeatMultiplier);
-    breed = settings.ensureHeatNeutral 
-      ? fuelcells 
-      : fuelcells * heatMultiplier;
+    /* Commented out because seems to be giving absurd results
+      heatMultiplier = heat / std::fmax(cooling, 1);
+      heatMultiplier = 
+        1.0
+        + std::log10(heatMultiplier) 
+        / std::exp(heatMultiplier * configHeatMultiplier);
+      breed = settings.ensureHeatNeutral 
+        ? fuelcells 
+        : fuelcells * heatMultiplier;
+    */
+    breed = fuelcells;
     avgBreed = breed * dutyCycle;
     efficiency = breed ? powerMult / breed : 1.0;
   }
