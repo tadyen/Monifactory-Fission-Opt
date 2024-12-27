@@ -80,14 +80,45 @@ namespace Fission {
     return (*state)(x, y, z) == tile && isActive(x, y, z);
   }
 
-  bool Evaluator::isSurroundActive(int x, int y, int z) const {
+  
+  bool Evaluator::isSurroundActive(int x, int y, int z){
+    auto isValidActive = [this](int x, int y, int z) {
+      return 
+        (*state)(x, y, z) < Air &&
+        isActive(x, y, z);
+    };
     return 
-      isActive(x-1, y, z) ||
-      isActive(x+1, y, z) ||
-      isActive(x, y-1, z) ||
-      isActive(x, y+1, z) ||
-      isActive(x, y, z-1) ||
-      isActive(x, y, z+1);
+      isValidActive(x-1, y, z) ||
+      isValidActive(x+1, y, z) ||
+      isValidActive(x, y-1, z) ||
+      isValidActive(x, y+1, z) ||
+      isValidActive(x, y, z-1) ||
+      isValidActive(x, y, z+1);
+  }
+
+  bool Evaluator::isConnectedActive(int x, int y, int z){
+    visited.fill(false);
+    return _isConnectedActive(x, y, z);
+  }
+
+  bool Evaluator::_isConnectedActive(int x, int y, int z){
+    if(!state->in_bounds(x, y, z))
+      return false;
+    if(visited(x, y, z))
+      return false;
+    visited(x, y, z) = true;
+    if(isSurroundActive(x,y,z)){
+      return 
+        _isConnectedActive(x-1,y,z) ||
+        _isConnectedActive(x+1,y,z) ||
+        _isConnectedActive(x,y-1,z) ||
+        _isConnectedActive(x,y+1,z) ||
+        _isConnectedActive(x,y,z-1) ||
+        _isConnectedActive(x,y,z+1);
+    }else{
+      return false;
+    }
+    
   }
 
   bool Evaluator::isBetweenSafe(int tile, int x, int y, int z) const {
@@ -174,32 +205,34 @@ namespace Fission {
     auto enderiumCheck = [this](int x, int y, int z){
       switch(rules(x,y,z)){
         case Enderium:
-          isActive(x, y, z) = isSurroundActive(x,y,z)
-          && countCasingNeighbors(x, y, z) == 3
-          && (!x || x == settings.sizeX - 1)
-          && (!y || y == settings.sizeY - 1)
-          && (!z || z == settings.sizeZ - 1);
+          isActive(x, y, z) = 
+            countCasingNeighbors(x, y, z) == 3
+            && (!x || x == settings.sizeX - 1)
+            && (!y || y == settings.sizeY - 1)
+            && (!z || z == settings.sizeZ - 1)
+            && isConnectedActive(x,y,z);
           break;
         case Endstone:
-          isActive(x, y, z) = countActiveNeighbors(Enderium, x, y, z);
+          isActive(x, y, z) = 
+            countNeighbors(Enderium, x, y, z) >= 1
+            && isConnectedActive(x,y,z);
           break;
         default:
           break;
       };
     };
 
-    auto loopXYZ = [this, enderiumCheck](auto callback){
+    auto loopXYZ = [this](auto callback){
       for (int x{}; x < settings.sizeX; ++x) {
         for (int y{}; y < settings.sizeY; ++y) {
           for (int z{}; z < settings.sizeZ; ++z) {
             callback(x,y,z);
-            enderiumCheck(x,y,z);
           }
         }
       }
     };
 
-
+    // fuel cells
     loopXYZ([this, &result](int x, int y, int z){
       int tile((*this->state)(x,y,z));
       if (tile == Cell) {
@@ -227,7 +260,7 @@ namespace Fission {
     });
 
     // Moderators & mark cell-adjacent HSinks as active
-    loopXYZ([this, &result](int x, int y, int z){
+    loopXYZ([this, &result, &enderiumCheck](int x, int y, int z){
       if ((*this->state)(x, y, z) == Moderator) {
         int mult(
           + getMultSafe(x - 1, y, z)
@@ -257,11 +290,13 @@ namespace Fission {
         case Cryotheum:
           isActive(x, y, z) = countNeighbors(Cell, x, y, z) >= 2;
           break;
+        default:
+          enderiumCheck(x,y,z);
       }
     });
     
     // mark HSinks that depend on above set as active
-    loopXYZ([this, &result](int x, int y, int z){
+    loopXYZ([this, &result, &enderiumCheck](int x, int y, int z){
       switch (rules(x, y, z)) {
         case Arsenic:
           isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z) >= 3;
@@ -290,11 +325,14 @@ namespace Fission {
         case Magnesium:
           isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z)
             && countCasingNeighbors(x, y, z);
+          break;
+        default:
+          enderiumCheck(x,y,z);
       }
     });
     
     // mark HSinks that depend on above set as active
-    loopXYZ([this, &result](int x, int y, int z){
+    loopXYZ([this, &result, &enderiumCheck](int x, int y, int z){
       switch (rules(x, y, z)) {
         case Silver:
           isActive(x, y, z) = countActiveNeighbors(Glowstone, x, y, z) >= 2
@@ -326,11 +364,15 @@ namespace Fission {
           break;
         case Copper:
           isActive(x, y, z) = countActiveNeighbors(Glowstone, x, y, z);
+          break;
+        default:
+          enderiumCheck(x,y,z);
+
       }
     });
 
     // mark HSinks that depend on above set as active
-    loopXYZ([this, &result](int x, int y, int z){
+    loopXYZ([this, &result, &enderiumCheck](int x, int y, int z){
       switch (rules(x, y, z)) {
         case Netherbrick:
           isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z);
@@ -349,11 +391,14 @@ namespace Fission {
           break;
         case Iron:
             isActive(x, y, z) = countActiveNeighbors(Gold, x, y, z);
+            break;
+        default:
+          enderiumCheck(x,y,z);
       }
     });
 
     // mark HSinks that depend on above set as active
-    loopXYZ([this, &result](int x, int y, int z){
+    loopXYZ([this, &result, &enderiumCheck](int x, int y, int z){
       switch (rules(x, y, z)) {
         case Purpur:
           isActive(x, y, z) = countCasingNeighbors(x, y, z)
@@ -361,11 +406,14 @@ namespace Fission {
           break;
         case Lead:
           isActive(x, y, z) = countActiveNeighbors(Iron, x, y, z);
+          break;
+        default:
+          enderiumCheck(x,y,z);
       }
     });
 
     // mark HSinks that depend on above set as active
-    loopXYZ([this, &result](int x, int y, int z){
+    loopXYZ([this, &result, &enderiumCheck](int x, int y, int z){
       switch (rules(x, y, z)) {
         case Slime:
           isActive(x, y, z) = countActiveNeighbors(Water, x, y, z)
@@ -377,12 +425,15 @@ namespace Fission {
           break;
         case Lithium:
           isActive(x, y, z) = isBetweenSafe(Lead, x, y, z);
+          break;
+        default:
+          enderiumCheck(x,y,z);
       }
     });
     
     // final enderium check
-    loopXYZ([](int x, int y, int z){
-      // do nothing
+    loopXYZ([&enderiumCheck](int x, int y, int z){
+      enderiumCheck(x,y,z);
     });
 
     // finalise
