@@ -4,12 +4,30 @@ body {
   flex-direction: column;
 }
 
+
+footer{
+  padding-top: 1em;
+}
+
 .divStep{
   margin: 2em 0;
 }
 
-footer{
-  padding-top: 1em;
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-container > .flex-entry {
+  padding: 1em;
+  flex-basis: auto;
+  flex-shrink: 1;
+}
+
+.flex-container > .selected {
+  background-color: rgb(255, 213, 134);
+  border-radius: 1em;
+  text-shadow: 0px 0px 1px cyan;
 }
 
 table {
@@ -18,11 +36,16 @@ table {
   white-space: nowrap;
 }
 
-td, th {
+td, th, caption {
   text-align: center;
   font-weight: normal;
   padding: 4px;
   background-color: white;
+}
+
+#divStep3 > table {
+  display: block;
+  overflow-x: scroll;
 }
 
 h2 {

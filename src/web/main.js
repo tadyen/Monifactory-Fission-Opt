@@ -39,15 +39,33 @@ $(() => { FissionOpt().then((FissionOpt) => {
     LECf251: [225, 120],
     HECf251: [900, 720],
   };
-  for (const [name, [power, heat]] of Object.entries(fuelPresets)) {
-    $('#' + name).click(() => {
-      if (opt !== null)
-        return;
-      fuelBasePower.val(power);
-      fuelBaseHeat.val(heat);
-    });
-  };
+  const fuelButtons = [];
+  (() => {
+    for (const [name, [power, heat]] of Object.entries(fuelPresets)){
+      fuelButtons.push({
+        name: name,
+        power: power,
+        heat: heat,
+        target: $('#' + name)
+      });
+    }
+  })();
   
+  fuelButtons.forEach((entry)=>{
+    if (opt !== null)
+      return;
+    $(entry.target.click( (e)=>{
+      (() => {
+        fuelButtons.forEach((e)=>{
+          e.target.parent().removeClass('selected');
+        });
+      })();
+      fuelBasePower.val(entry.power);
+      fuelBaseHeat.val(entry.heat);
+      $(e.target).parent().addClass('selected');
+    }));
+  })
+
   const schedule = () => {
     timeout = window.setTimeout(step, 0);
   };

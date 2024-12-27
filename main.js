@@ -40,9 +40,10 @@ $(() => { FissionOpt().then((FissionOpt) => {
     HECf251: [900, 720],
   };
   for (const [name, [power, heat]] of Object.entries(fuelPresets)) {
-    $('#' + name).click(() => {
+    $('#' + name).click((e) => {
       if (opt !== null)
         return;
+      e.addClass("selected");
       fuelBasePower.val(power);
       fuelBaseHeat.val(heat);
     });

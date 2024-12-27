@@ -13,7 +13,7 @@
     <header>
       <div>
         <h2>NC-Neoteric Fission Reactor Designer</h2>
-        original by cyb0124, modified by tadyen <a href="https://github.com/tadyen/FissionOpt">source</a>
+        original by cyb0124, modified by tadyen <a href="https://github.com/tadyen/Monifactory-Fission-Opt">source</a>
       </div>
       <br></br>
       <div>
@@ -35,36 +35,32 @@
         <b>Step 2</b>: Select the fuel to be used, or manually input fuel specifications.
         <div>Fuel Base Power: <input type="text" id="fuelBasePower"> RF/t</div>
         <div>Fuel Base Heat: <input text="text" id="fuelBaseHeat"> H/t</div>
-        <div class="fuelPresets"><table>
-          <tr>
-            <td>Fuel</td>
-            <td><a href="javascript:;" id="TBU">TBU</a>
-            <td><a href="javascript:;" id="LEU235">LEU-235</a>
-            <td><a href="javascript:;" id="HEU235">HEU-235</a>
-            <td><a href="javascript:;" id="LEU233">LEU-233</a>
-            <td><a href="javascript:;" id="HEU233">HEU-233</a>
-            <td><a href="javascript:;" id="LEN236">LEN-236</a>
-            <td><a href="javascript:;" id="HEN236">HEN-236</a>
-            <td><a href="javascript:;" id="LEP239">LEP-239</a>
-            <td><a href="javascript:;" id="HEP239">HEP-239</a>
-            <td><a href="javascript:;" id="LEP241">LEP-241</a>
-            <td><a href="javascript:;" id="HEP241">HEP-241</a>
-            <td><a href="javascript:;" id="LEA242">LEA-242</a>
-            <td><a href="javascript:;" id="HEA242">HEA-242</a>
-            <td><a href="javascript:;" id="LECm243">LECm-243</a>
-            <td><a href="javascript:;" id="HECm243">HECm-243</a>
-            <td><a href="javascript:;" id="LECm245">LECm-245</a>
-            <td><a href="javascript:;" id="HECm245">HECm-245</a>
-            <td><a href="javascript:;" id="LECm247">LECm-247</a>
-            <td><a href="javascript:;" id="HECm247">HECm-247</a>
-            <td><a href="javascript:;" id="LEB248">LEB-248</a>
-            <td><a href="javascript:;" id="HEB248">HEB-248</a>
-            <td><a href="javascript:;" id="LECf249">LECf-249</a>
-            <td><a href="javascript:;" id="HECf249">HECf-249</a>
-            <td><a href="javascript:;" id="LECf251">LECf-251</a>
-            <td><a href="javascript:;" id="HECf251">HECf-251</a>
-          </tr>
-        </table></div>
+        <div class="fuelPresets flex-container">
+          <div class="flex-entry"><a href="javascript:;" id="TBU">TBU</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LEU235">LEU-235</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HEU235">HEU-235</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LEU233">LEU-233</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HEU233">HEU-233</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LEN236">LEN-236</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HEN236">HEN-236</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LEP239">LEP-239</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HEP239">HEP-239</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LEP241">LEP-241</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HEP241">HEP-241</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LEA242">LEA-242</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HEA242">HEA-242</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LECm243">LECm-243</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HECm243">HECm-243</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LECm245">LECm-245</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HECm245">HECm-245</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LECm247">LECm-247</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HECm247">HECm-247</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LEB248">LEB-248</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HEB248">HEB-248</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LECf249">LECf-249</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HECf249">HECf-249</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="LECf251">LECf-251</a></div>
+          <div class="flex-entry"><a href="javascript:;" id="HECf251">HECf-251</a></div>
       </div>
       <div id="divStep3" class="divStep">
         <b>Step 3</b>: If you want to limit the usage of a type of block, enter the maximum number allowed in the table below.
