@@ -1,9 +1,16 @@
+#infoWarn {
+  color: red;
+}
+
+header {
+  margin: 2vh 0;
+}
+
 body {
   line-height: 150%;
   display: flex;
   flex-direction: column;
 }
-
 
 footer{
   padding-top: 1em;
