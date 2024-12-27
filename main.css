@@ -4,12 +4,13 @@ body {
   flex-direction: column;
 }
 
-.divStep{
-  margin: 2em 0;
-}
 
 footer{
   padding-top: 1em;
+}
+
+.divStep{
+  margin: 2em 0;
 }
 
 .flex-container {
@@ -35,11 +36,16 @@ table {
   white-space: nowrap;
 }
 
-td, th {
+td, th, caption {
   text-align: center;
   font-weight: normal;
   padding: 4px;
   background-color: white;
+}
+
+#divStep3 > table {
+  display: block;
+  overflow-x: scroll;
 }
 
 h2 {

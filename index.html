@@ -108,7 +108,7 @@
               <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
               <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
               <td><input type="text"></td>
-              <td><input type="text"></td><td><input type="text"></td><td>
+              <td><input type="text"></td><td><input type="text"></td>
             </tr>
             <tr id="activeRate"><th>Active Rate (H/t)</th>
               <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
@@ -163,13 +163,14 @@
         <label><input type="checkbox" id="useNet" checked>Use reinforcement learning (requires more memory, slightly slower but can produce better design)</label><br>
         <label><input type="checkbox" id="applyAdditionalGoals">Experimental. Apply additional goal custom targets to match.</label><br>
         <div class="goalTableSection">
-          <table><caption>Custom Targets (Experimental)</caption>
+          <table>
+            <caption>Custom Targets (Experimental)</caption>
+            <thead>
+              <th>Metric</th>
+              <th>Value #</th>
+              <th>Weight (&lt;float&gt; 0 to 1)</th>
+            </thead>
             <tbody>
-              <tr>
-                <td>Metric</td>
-                <td>Value #</td>
-                <td>Weight (&lt;float&gt; 0 to 1)</td>
-              </tr>
               <tr>
                 <td>Primary|Secondary goal weights(&lt;float&gt; 0 to 1)</td>
                 <td><input type="text" id="goalWeightPrimary" value="1"></td>

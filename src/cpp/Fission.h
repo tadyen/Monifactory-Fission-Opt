@@ -81,6 +81,7 @@ namespace Fission {
     bool isBetweenSafe(int tile, int x, int y, int z) const;
     int countActiveNeighbors(int tile, int x, int y, int z) const;
     bool isTileSafe(int tile, int x, int y, int z) const;
+    bool isSurroundActive(int x, int y, int z) const;
     int countNeighbors(int tile, int x, int y, int z) const;
     int countCasingNeighbors(int x, int y, int z) const;
     bool checkAccessibility(int compatibleTile, int x, int y, int z);

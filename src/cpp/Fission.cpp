@@ -34,7 +34,7 @@ namespace Fission {
     isActive(xt::empty<bool>({settings.sizeX, settings.sizeY, settings.sizeZ})),
     isModeratorInLine(xt::empty<bool>({settings.sizeX, settings.sizeY, settings.sizeZ})),
     visited(xt::empty<bool>({settings.sizeX, settings.sizeY, settings.sizeZ})) {}
-
+  
   int Evaluator::getTileSafe(int x, int y, int z) const {
     if (!state->in_bounds(x, y, z))
       return -1;
@@ -78,6 +78,16 @@ namespace Fission {
     if (!state->in_bounds(x, y, z))
       return false;
     return (*state)(x, y, z) == tile && isActive(x, y, z);
+  }
+
+  bool Evaluator::isSurroundActive(int x, int y, int z) const {
+    return 
+      isActive(x-1, y, z) ||
+      isActive(x+1, y, z) ||
+      isActive(x, y-1, z) ||
+      isActive(x, y+1, z) ||
+      isActive(x, y, z-1) ||
+      isActive(x, y, z+1);
   }
 
   bool Evaluator::isBetweenSafe(int tile, int x, int y, int z) const {
@@ -161,238 +171,231 @@ namespace Fission {
     isModeratorInLine.fill(false);
     this->state = &state;
 
-    // cells and direct connection to cell
-    for (int x{}; x < settings.sizeX; ++x) {
-      for (int y{}; y < settings.sizeY; ++y) {
-        for (int z{}; z < settings.sizeZ; ++z) {
-          int tile((*this->state)(x, y, z));
-          if (tile == Cell) {
-            int mult(countMult(x, y, z));
-            mults(x, y, z) = mult;
-            rules(x, y, z) = -1;
-            ++result.fuelcells;
-            result.powerMult += mult;
+    auto enderiumCheck = [this](int x, int y, int z){
+      switch(rules(x,y,z)){
+        case Enderium:
+          isActive(x, y, z) = isSurroundActive(x,y,z)
+          && countCasingNeighbors(x, y, z) == 3
+          && (!x || x == settings.sizeX - 1)
+          && (!y || y == settings.sizeY - 1)
+          && (!z || z == settings.sizeZ - 1);
+          break;
+        case Endstone:
+          isActive(x, y, z) = countActiveNeighbors(Enderium, x, y, z);
+          break;
+        default:
+          break;
+      };
+    };
 
-            // https://github.com/igentuman/NuclearCraft-Neoteric/blob/2eb978d7af8860a73645993c7ea4a6fd9f5aa27c/src/main/java/igentuman/nc/multiblock/fission/FissionReactorMultiblock.java#L237C1-L237C26
-            result.heatMult += 3 * (mult - 1);
-          } else {
-            mults(x, y, z) = 0;
-            if (tile < Active) {
-              rules(x, y, z) = tile;
-            } else if (tile < Cell) {
-              if (settings.ensureActiveCoolerAccessible && !checkAccessibility(tile, x, y, z)) {
-                rules(x, y, z) = -1;
-              } else {
-                rules(x, y, z) = tile - Active;
-              }
-            } else {
-              rules(x, y, z) = -1;
-            }
+    auto loopXYZ = [this, enderiumCheck](auto callback){
+      for (int x{}; x < settings.sizeX; ++x) {
+        for (int y{}; y < settings.sizeY; ++y) {
+          for (int z{}; z < settings.sizeZ; ++z) {
+            callback(x,y,z);
+            enderiumCheck(x,y,z);
           }
         }
       }
-    }
+    };
+
+
+    loopXYZ([this, &result](int x, int y, int z){
+      int tile((*this->state)(x,y,z));
+      if (tile == Cell) {
+        int mult(this->countMult(x, y, z));
+        this->mults(x, y, z) = mult;
+        this->rules(x, y, z) = -1;
+        ++result.fuelcells;
+        result.powerMult += mult;
+        // https://github.com/igentuman/NuclearCraft-Neoteric/blob/2eb978d7af8860a73645993c7ea4a6fd9f5aa27c/src/main/java/igentuman/nc/multiblock/fission/FissionReactorMultiblock.java#L237C1-L237C26
+        result.heatMult += 3 * (mult - 1);
+      } else {
+        mults(x, y, z) = 0;
+        if (tile < Active) {
+          rules(x, y, z) = tile;
+        } else if (tile < Cell) {
+          if (settings.ensureActiveCoolerAccessible && !checkAccessibility(tile, x, y, z)) {
+            rules(x, y, z) = -1;
+          } else {
+            rules(x, y, z) = tile - Active;
+          }
+        } else {
+          rules(x, y, z) = -1;
+        }
+      }
+    });
 
     // Moderators & mark cell-adjacent HSinks as active
-    for (int x{}; x < settings.sizeX; ++x) {
-      for (int y{}; y < settings.sizeY; ++y) {
-        for (int z{}; z < settings.sizeZ; ++z) {
-          if ((*this->state)(x, y, z) == Moderator) {
-            int mult(
-              + getMultSafe(x - 1, y, z)
-              + getMultSafe(x + 1, y, z)
-              + getMultSafe(x, y - 1, z)
-              + getMultSafe(x, y + 1, z)
-              + getMultSafe(x, y, z - 1)
-              + getMultSafe(x, y, z + 1));
-            if (mult) {
-              isActive(x, y, z) = true;
-              result.powerMult += mult * (modPower / 6.0);
-              result.heatMult += mult * (modHeat / 6.0);
-            } else if (!isModeratorInLine(x, y, z)) {
-              result.invalidTiles.emplace_back(x, y, z);
-            }
-          } else switch (rules(x, y, z)) {
-            case Manganese:
-              isActive(x, y, z) = countNeighbors(Cell, x, y, z) >= 2;
-              break;
-            case Redstone:
-              isActive(x, y, z) = countNeighbors(Cell, x, y, z);
-              break;
-            case Lapis:
-              isActive(x, y, z) = countNeighbors(Cell, x, y, z)
-                && countCasingNeighbors(x, y, z);
-              break;
-            case Enderium:
-              isActive(x, y, z) = countCasingNeighbors(x, y, z) == 3
-                && (!x || x == settings.sizeX - 1)
-                && (!y || y == settings.sizeY - 1)
-                && (!z || z == settings.sizeZ - 1);
-              break;
-            case Cryotheum:
-              isActive(x, y, z) = countNeighbors(Cell, x, y, z) >= 2;
-          }
+    loopXYZ([this, &result](int x, int y, int z){
+      if ((*this->state)(x, y, z) == Moderator) {
+        int mult(
+          + getMultSafe(x - 1, y, z)
+          + getMultSafe(x + 1, y, z)
+          + getMultSafe(x, y - 1, z)
+          + getMultSafe(x, y + 1, z)
+          + getMultSafe(x, y, z - 1)
+          + getMultSafe(x, y, z + 1));
+        if (mult) {
+          isActive(x, y, z) = true;
+          result.powerMult += mult * (modPower / 6.0);
+          result.heatMult += mult * (modHeat / 6.0);
+        } else if (!isModeratorInLine(x, y, z)) {
+          result.invalidTiles.emplace_back(x, y, z);
         }
+      } else switch (rules(x, y, z)) {
+        case Manganese:
+          isActive(x, y, z) = countNeighbors(Cell, x, y, z) >= 2;
+          break;
+        case Redstone:
+          isActive(x, y, z) = countNeighbors(Cell, x, y, z);
+          break;
+        case Lapis:
+          isActive(x, y, z) = countNeighbors(Cell, x, y, z)
+            && countCasingNeighbors(x, y, z);
+          break;
+        case Cryotheum:
+          isActive(x, y, z) = countNeighbors(Cell, x, y, z) >= 2;
+          break;
       }
-    }
+    });
     
     // mark HSinks that depend on above set as active
-    for (int x{}; x < settings.sizeX; ++x) {
-      for (int y{}; y < settings.sizeY; ++y) {
-        for (int z{}; z < settings.sizeZ; ++z) {
-          switch (rules(x, y, z)) {
-            case Arsenic:
-              isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z) >= 3;
-              break;
-            case Endstone:
-              isActive(x, y, z) = countActiveNeighbors(Enderium, x, y, z) >= 3;
-              break;
-            case Water:
-              isActive(x, y, z) = countNeighbors(Cell, x, y, z)
-                || countActiveNeighbors(Moderator, x, y, z);
-              break;
-            case Quartz:
-              isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z);
-              break;
-            case Glowstone:
-              isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z) >= 2;
-              break;
-            case Helium:
-              isActive(x, y, z) = countActiveNeighbors(Redstone, x, y, z) == 1
-                && countCasingNeighbors(x, y, z);
-              break;
-            case Emerald:
-              isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z)
-                && countNeighbors(Cell, x, y, z);
-              break;
-            case Tin:
-              isActive(x, y, z) = isBetweenSafe(Lapis, x, y, z);
-              break;
-            case Magnesium:
-              isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z)
-                && countCasingNeighbors(x, y, z);
-          }
-        }
+    loopXYZ([this, &result](int x, int y, int z){
+      switch (rules(x, y, z)) {
+        case Arsenic:
+          isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z) >= 3;
+          break;
+        case Water:
+          isActive(x, y, z) = countNeighbors(Cell, x, y, z)
+            || countActiveNeighbors(Moderator, x, y, z);
+          break;
+        case Quartz:
+          isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z);
+          break;
+        case Glowstone:
+          isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z) >= 2;
+          break;
+        case Helium:
+          isActive(x, y, z) = countActiveNeighbors(Redstone, x, y, z) == 1
+            && countCasingNeighbors(x, y, z);
+          break;
+        case Emerald:
+          isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z)
+            && countNeighbors(Cell, x, y, z);
+          break;
+        case Tin:
+          isActive(x, y, z) = isBetweenSafe(Lapis, x, y, z);
+          break;
+        case Magnesium:
+          isActive(x, y, z) = countActiveNeighbors(Moderator, x, y, z)
+            && countCasingNeighbors(x, y, z);
       }
-    }
+    });
     
     // mark HSinks that depend on above set as active
-    for (int x{}; x < settings.sizeX; ++x) {
-      for (int y{}; y < settings.sizeY; ++y) {
-        for (int z{}; z < settings.sizeZ; ++z) {
-          switch (rules(x, y, z)) {
-            case Silver:
-              isActive(x, y, z) = countActiveNeighbors(Glowstone, x, y, z) >= 2
-                // irradiator disabled
-                // && ( countActiveNeighbors(Tin, x, y, z) || countActiveNeighbors(Irradiator, x, y, z) );
-                && countActiveNeighbors(Tin, x, y, z);
-              break;
-            case Prismarine:
-              isActive(x, y, z) = countActiveNeighbors(Water, x, y, z);
-              break;
-            case Obsidian:
-              isActive(x, y, z) = isBetweenSafe(Glowstone, x, y, z);
-              break;
-            case Aluminium:
-                isActive(x, y, z) = countActiveNeighbors(Quartz, x, y, z)
-                && countActiveNeighbors(Lapis, x, y, z);
-              break;
-            case Boron:
-                isActive(x, y, z) = countActiveNeighbors(Quartz, x, y, z)
-                && (countCasingNeighbors(x, y, z) || countActiveNeighbors(Moderator, x, y, z));
-              break;
-            case Gold:
-              isActive(x, y, z) = countActiveNeighbors(Water, x, y, z)
-                && countActiveNeighbors(Redstone, x, y, z);
-              break;
-            case Diamond:
-              isActive(x, y, z) = countActiveNeighbors(Copper, x, y, z)
-                && countActiveNeighbors(Quartz, x, y, z);
-              break;
-            case Copper:
-              isActive(x, y, z) = countActiveNeighbors(Glowstone, x, y, z);
-          }
-        }
+    loopXYZ([this, &result](int x, int y, int z){
+      switch (rules(x, y, z)) {
+        case Silver:
+          isActive(x, y, z) = countActiveNeighbors(Glowstone, x, y, z) >= 2
+            // irradiator disabled
+            // && ( countActiveNeighbors(Tin, x, y, z) || countActiveNeighbors(Irradiator, x, y, z) );
+            && countActiveNeighbors(Tin, x, y, z);
+          break;
+        case Prismarine:
+          isActive(x, y, z) = countActiveNeighbors(Water, x, y, z);
+          break;
+        case Obsidian:
+          isActive(x, y, z) = isBetweenSafe(Glowstone, x, y, z);
+          break;
+        case Aluminium:
+            isActive(x, y, z) = countActiveNeighbors(Quartz, x, y, z)
+            && countActiveNeighbors(Lapis, x, y, z);
+          break;
+        case Boron:
+            isActive(x, y, z) = countActiveNeighbors(Quartz, x, y, z)
+            && (countCasingNeighbors(x, y, z) || countActiveNeighbors(Moderator, x, y, z));
+          break;
+        case Gold:
+          isActive(x, y, z) = countActiveNeighbors(Water, x, y, z)
+            && countActiveNeighbors(Redstone, x, y, z);
+          break;
+        case Diamond:
+          isActive(x, y, z) = countActiveNeighbors(Copper, x, y, z)
+            && countActiveNeighbors(Quartz, x, y, z);
+          break;
+        case Copper:
+          isActive(x, y, z) = countActiveNeighbors(Glowstone, x, y, z);
       }
-    }
+    });
 
     // mark HSinks that depend on above set as active
-    for (int x{}; x < settings.sizeX; ++x) {
-      for (int y{}; y < settings.sizeY; ++y) {
-        for (int z{}; z < settings.sizeZ; ++z) {
-          switch (rules(x, y, z)) {
-            case Netherbrick:
-              isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z);
-              break;
-            // Irradiator disabled
-            // case Netherite:
-            //   isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z)
-            //     && countActiveNeighbors(Irradiator, x, y, z);
-            //   break;
-            case Netherite:
-              isActive(x,y,z)=false;
-              break;
-            case Fluorite:
-              isActive(x, y, z) = countActiveNeighbors(Gold, x, y, z)
-                && countActiveNeighbors(Prismarine, x, y, z);
-              break;
-            case Iron:
-                isActive(x, y, z) = countActiveNeighbors(Gold, x, y, z);
-          }
-        }
+    loopXYZ([this, &result](int x, int y, int z){
+      switch (rules(x, y, z)) {
+        case Netherbrick:
+          isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z);
+          break;
+        // Irradiator disabled
+        // case Netherite:
+        //   isActive(x, y, z) = countActiveNeighbors(Obsidian, x, y, z)
+        //     && countActiveNeighbors(Irradiator, x, y, z);
+        //   break;
+        case Netherite:
+          isActive(x,y,z)=false;
+          break;
+        case Fluorite:
+          isActive(x, y, z) = countActiveNeighbors(Gold, x, y, z)
+            && countActiveNeighbors(Prismarine, x, y, z);
+          break;
+        case Iron:
+            isActive(x, y, z) = countActiveNeighbors(Gold, x, y, z);
       }
-    }
+    });
 
     // mark HSinks that depend on above set as active
-    for (int x{}; x < settings.sizeX; ++x) {
-      for (int y{}; y < settings.sizeY; ++y) {
-        for (int z{}; z < settings.sizeZ; ++z) {
-          switch (rules(x, y, z)) {
-            case Purpur:
-              isActive(x, y, z) = countCasingNeighbors(x, y, z)
-                && countActiveNeighbors(Iron, x, y, z);
-              break;
-            case Lead:
-              isActive(x, y, z) = countActiveNeighbors(Iron, x, y, z);
-          }
-        }
+    loopXYZ([this, &result](int x, int y, int z){
+      switch (rules(x, y, z)) {
+        case Purpur:
+          isActive(x, y, z) = countCasingNeighbors(x, y, z)
+            && countActiveNeighbors(Iron, x, y, z);
+          break;
+        case Lead:
+          isActive(x, y, z) = countActiveNeighbors(Iron, x, y, z);
       }
-  }
+    });
 
     // mark HSinks that depend on above set as active
-    for (int x{}; x < settings.sizeX; ++x) {
-      for (int y{}; y < settings.sizeY; ++y) {
-        for (int z{}; z < settings.sizeZ; ++z) {
-          switch (rules(x, y, z)) {
-            case Slime:
-              isActive(x, y, z) = countActiveNeighbors(Water, x, y, z)
-                && countActiveNeighbors(Lead, x, y, z);
-              break;
-            case Nitrogen:
-              isActive(x, y, z) = countActiveNeighbors(Copper, x, y, z)
-                && countActiveNeighbors(Purpur, x, y, z);
-              break;
-            case Lithium:
-              isActive(x, y, z) = isBetweenSafe(Lead, x, y, z);
-          }
-        }
+    loopXYZ([this, &result](int x, int y, int z){
+      switch (rules(x, y, z)) {
+        case Slime:
+          isActive(x, y, z) = countActiveNeighbors(Water, x, y, z)
+            && countActiveNeighbors(Lead, x, y, z);
+          break;
+        case Nitrogen:
+          isActive(x, y, z) = countActiveNeighbors(Copper, x, y, z)
+            && countActiveNeighbors(Purpur, x, y, z);
+          break;
+        case Lithium:
+          isActive(x, y, z) = isBetweenSafe(Lead, x, y, z);
       }
-    }
+    });
+    
+    // final enderium check
+    loopXYZ([](int x, int y, int z){
+      // do nothing
+    });
+
     // finalise
-    for (int x{}; x < settings.sizeX; ++x) {
-      for (int y{}; y < settings.sizeY; ++y) {
-        for (int z{}; z < settings.sizeZ; ++z) {
-          int tile((*this->state)(x, y, z));
-          if (tile < Cell) {
-            if (isActive(x, y, z)){
-              result.cooling += settings.coolingRates[tile];
-            }
-            else
-              result.invalidTiles.emplace_back(x, y, z);
-          }
+    loopXYZ([this, &result](int x, int y, int z){
+      int tile((*this->state)(x, y, z));
+      if (tile < Cell) {
+        if (isActive(x, y, z)){
+          result.cooling += settings.coolingRates[tile];
         }
+        else
+          result.invalidTiles.emplace_back(x, y, z);
       }
-    }
+    });
 
     result.compute(settings);
   }
