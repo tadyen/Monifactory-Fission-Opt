@@ -16,7 +16,11 @@ namespace OverhaulFission {
   constexpr int coolingEfficiencyLeniency(10);
   constexpr double shieldEfficiency(0.5);
   constexpr int shieldHeatPerFlux(5);
-  constexpr int neutronReach(4);
+  // In NCN, neutron reach appears to be much shorter
+  // While the original NC can have four moderator blocks between two fuel cells and still have the cells counted as adjacent
+  // NCN only allows a single moderator block sandwiched in the middle
+  // https://github.com/igentuman/NuclearCraft-Neoteric/blob/71aa2666329d5d98d2e49279ba8579da1c0393d3/src/main/java/igentuman/nc/multiblock/fission/FissionReactorMultiblock.java#L359-L363
+  constexpr int neutronReach(1);
   constexpr int coolingRates[] {
     55, 50, 85, 80, 70, 105, 90, 100, 110, 115, 145, 65, 95, 200, 195, 75, 120,
     60, 160, 130, 125, 150, 175, 170, 165, 180, 140, 135, 185, 190, 155, 205

@@ -6,6 +6,10 @@
 namespace Fission {
   using Coords = std::vector<std::tuple<int, int, int>>;
 
+  // In NCN, neutron reach appears to be much shorter
+  // While the original NC can have four moderator blocks between two fuel cells and still have the cells counted as adjacent
+  // NCN only allows a single moderator block sandwiched in the middle
+  // https://github.com/igentuman/NuclearCraft-Neoteric/blob/71aa2666329d5d98d2e49279ba8579da1c0393d3/src/main/java/igentuman/nc/multiblock/fission/FissionReactorMultiblock.java#L359-L363
   constexpr int neutronReach(1);
   constexpr double modPower(1.0), modHeat(2.0);
   // https://github.com/igentuman/NuclearCraft-Neoteric/blob/1.20/src/main/java/igentuman/nc/handler/config/FissionConfig.java

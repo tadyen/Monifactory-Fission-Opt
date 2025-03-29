@@ -240,8 +240,11 @@ namespace Fission {
         this->mults(x, y, z) = mult;
         this->rules(x, y, z) = -1;
         ++result.fuelcells;
-        result.powerMult += mult;
+        // NCN calculates power based on heat and number of fuelcells instead, thus commented out
+        // result.powerMult += mult;
         // https://github.com/igentuman/NuclearCraft-Neoteric/blob/2eb978d7af8860a73645993c7ea4a6fd9f5aa27c/src/main/java/igentuman/nc/multiblock/fission/FissionReactorMultiblock.java#L237C1-L237C26
+        // mult may be 1 here (if a fuel cell has no neighboring fuel cells), resulting in 0 additional heat
+        // NCN "fixes" this later by clamping this to be at minimum equal to number of fuelcells
         result.heatMult += 3 * (mult - 1);
       } else {
         mults(x, y, z) = 0;
@@ -258,6 +261,12 @@ namespace Fission {
         }
       }
     });
+    // Add NCN's method for calculating power
+    // https://github.com/igentuman/NuclearCraft-Neoteric/blob/71aa2666329d5d98d2e49279ba8579da1c0393d3/src/main/java/igentuman/nc/block/entity/fission/FissionControllerBE.java#L630
+    result.powerMult = std::abs(result.heatMult - result.fuelcells);
+    // Use NCN's approach to clamp heat, avoiding absurd results of 0 heat in neighbourless cells
+    // https://github.com/igentuman/NuclearCraft-Neoteric/blob/71aa2666329d5d98d2e49279ba8579da1c0393d3/src/main/java/igentuman/nc/block/entity/fission/FissionControllerBE.java#L620
+    result.heatMult = std::fmax(result.heatMult, result.fuelcells);
 
     // Moderators & mark cell-adjacent HSinks as active
     loopXYZ([this, &result, &enderiumCheck](int x, int y, int z){
